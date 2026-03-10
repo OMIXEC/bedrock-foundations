@@ -1,0 +1,7 @@
+[
+  {"id": "prod-001", "name": "Sony WH-1000XM4", "category": "Headphones", "description": "Noise canceling wireless headphones", "price": 89.99, "brand": "Sony"},
+  {"id": "prod-002", "name": "Apple AirPods Pro", "category": "Headphones", "description": "Active noise cancellation earbuds", "price": 199.99, "brand": "Apple"},
+  {"id": "prod-003", "name": "Bose QuietComfort 45", "category": "Headphones", "description": "Premium wireless headphones", "price": 279.99, "brand": "Bose"},
+  {"id": "prod-004", "name": "Anker Soundcore Life Q30", "category": "Headphones", "description": "Budget wireless headphones", "price": 79.99, "brand": "Anker"},
+  {"id": "prod-005", "name": "Jabra Elite 85h", "category": "Headphones", "description": "Smart wireless headphones", "price": 149.99, "brand": "Jabra"}
+]

@@ -1,0 +1,8 @@
+-r requirements.txt
+aws-lambda-powertools
+boto3
+black
+pytest
+checkov
+awscurl
+python-dotenv
