@@ -1,0 +1,2 @@
+Use the uploaded product image as reference. Create an ultra-realistic commercial image of a {argument name="product name" default="Garoto"} chocolate bar. Show a broken bar with melted chocolate texture, visible cocoa details and rich gloss. Add subtle chocolate splashes and floating crumbs. Clean studio setup, vibrant colored background, bold advertising style for social media. 8K ultra realistic, high sharpness, high contrast, professional lighting with realistic shadows and highlights, no text, no watermark, no blur, no distortion, no low quality, no cartoonish style
+

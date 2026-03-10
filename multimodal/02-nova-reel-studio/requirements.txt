@@ -1,0 +1,9 @@
+python-multipart
+google-cloud-aiplatform
+boto3
+fastapi
+uvicorn
+python-dotenv
+pydantic
+pydantic-settings
+streamlit

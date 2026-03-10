@@ -1,0 +1,67 @@
+{
+  "type": "image_generation_prompt",
+  "style": "ultra-realistic lifestyle photography, cinematic yet natural",
+  "aspect_ratio": "3:4",
+  "identity_preservation": {
+    "use_reference_image": true,
+    "strict_identity_lock": true,
+    "alter_face": false,
+    "alter_proportions": false,
+    "notes": "Strict adherence to the facial reference photo. Preserve exact facial features, proportions, skin texture, and natural expression."
+  },
+  "environment": {
+    "location": "modern premium supermarket",
+    "layout": "wide aisle with fully stocked shelves on both sides",
+    "details": [
+      "realistic product packaging",
+      "clean organized shelves",
+      "premium market atmosphere"
+    ]
+  },
+  "subject": {
+    "gender": "female",
+    "body_type": "fit, natural physique",
+    "pose": {
+      "action": "walking naturally between shelves",
+      "hands": {
+        "left": "casually holding a shopping basket",
+        "right": "reaching toward a product on the shelf"
+      }
+    },
+    "expression": "relaxed, confident, candid",
+    "wardrobe": {
+      "top": "clean white t-shirt",
+      "bottom": "fitted blue jeans",
+      "footwear": "minimal white sneakers"
+    }
+  },
+  "lighting": {
+    "type": "soft overhead supermarket lighting",
+    "effects": [
+      "realistic reflections on product packaging",
+      "true-to-life color rendering",
+      "natural skin tones"
+    ]
+  },
+  "camera": {
+    "shot_type": "full-body",
+    "distance": "slight distance",
+    "angle": "eye-level",
+    "depth_of_field": "shallow depth of field with foreground sharp and background shelves slightly blurred",
+    "quality": "photographic realism"
+  },
+  "quality": {
+    "realism": "maximum realism",
+    "details": "high detail in clothing, skin, and environment",
+    "style": "cinematic but natural, no stylization"
+  },
+  "constraints": [
+    "No stylization",
+    "No distortion",
+    "No beauty filters",
+    "No artificial poses",
+    "No text, logos, or watermarks",
+    "No exaggerated lighting"
+  ],
+  "output_goal": "Create a hyper-realistic, candid full-body photo of a woman shopping in a modern premium supermarket aisle, preserving her exact facial identity and proportions with a natural, cinematic photographic look."
+}

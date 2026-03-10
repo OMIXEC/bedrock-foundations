@@ -1,0 +1,56 @@
+{
+  "luxury_product_video": {
+    "type": "video",
+    "description": "High-end commercial 3x3 grid, cinematic product showcase",
+    "template": "Create a 3x3 grid for a high-end commercial marketing campaign for {product_name}, centered around the product. Visual Style: {style_adjective} and {color_palette}. Grid Concepts: 1. Hero still life. 2. Macro detail of {material}. 3. Dynamic liquid/particles. 4. Minimalist. 5. Floating/Anti-gravity. 6. Sensory close-up. 7. Color-driven scene ({color_palette}). 8. Abstract components. 9. Surreal fusion. Rules: Product branding must be 100% accurate. Cinematic lighting, 8K resolution.",
+    "negative_prompt": "distortion, bad anatomy, text, watermark, low quality",
+    "required_params": ["product_name"],
+    "optional_params": {
+      "style_adjective": "sophisticated",
+      "color_palette": "neutral",
+      "material": "texture"
+    }
+  },
+  "energy_drink_video": {
+    "type": "video",
+    "description": "High-energy commercial with neon effects and fluids",
+    "template": "Hyper-realistic 4K product video of {product_name} ({product_type}), logo sharp. Surface details: condensation, cold tactile look. Action: Vibrant {color_palette} flames/fluids erupting from bottom, licking around the product without consuming it. Background: Dark, cinematic, with {color_palette} rim lighting. Atmosphere: Volumetric smoke, high contrast, slow motion eruption.",
+    "required_params": ["product_name", "product_type"],
+    "optional_params": {
+      "color_palette": "neon-green",
+      "product_type": "can"
+    }
+  },
+  "cosmetic_dive_video": {
+    "type": "video",
+    "description": "Playful 'diving' animation for cosmetics",
+    "template": "Vertical advertising visual. {product_name} arranged in a queue like divers on a platform. Below, a pool of molten {material} ({color_palette}). Products dive into the pool. Style: Playful anthropomorphic surrealism, luxury cosmetic advertising aesthetics. Lighting: Soft studio beauty lighting.",
+    "required_params": ["product_name"],
+    "optional_params": {
+      "color_palette": "pink",
+      "material": "liquid lipstick"
+    }
+  },
+  "lifestyle_shopping_image": {
+    "type": "image",
+    "description": "Candid lifestyle photography in a premium supermarket",
+    "template": "Hyper-realistic candid full-body photo of a {subject_demographic} shopping in a {environment_type}. Context: Holding/Interacting with {product_name}. Lighting: {lighting_style}. Style: Cinematic, natural, photorealistic, 8K, highly detailed environment.",
+    "required_params": ["product_name"],
+    "optional_params": {
+      "subject_demographic": "fit subject",
+      "environment_type": "modern premium supermarket",
+      "lighting_style": "soft overhead lighting"
+    }
+  },
+  "ultra_realistic_product_image": {
+    "type": "image",
+    "description": "Ultra-realistic studio product shot",
+    "template": "Ultra-realistic commercial image of {product_name} ({product_type}). {composition_details}. Clean studio setup, {color_palette} background. 8K resolution, professional lighting, sharp focus, advertising standard.",
+    "required_params": ["product_name"],
+    "optional_params": {
+      "product_type": "product",
+      "composition_details": "broken bar with melted texture" ,
+      "color_palette": "vibrant"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "prompt": "Vertical advertising visual with a playful anthropomorphic tone. Luxury pink lipsticks arranged in a neat vertical queue at the top, each lipstick posed like a diver on a diving platform, some slightly tilted forward, some mid-lean, conveying anticipation and focus before the jump. Below them, thick molten lipstick flowing downward, glossy, creamy, and elastic, forming a rich liquid lipstick pool at the bottom. Several lipsticks frozen mid-air in precise diving poses, angled downward like synchronized divers, capturing a clean pre-splash moment. Warm pink gradient background, studio beauty advertising lighting, soft specular highlights, refined shadows. Strong central axis composition, clear visual hierarchy. Minimalist graphic layout, fun yet premium cosmetics advertising aesthetic, ultra-detailed textures, hyper-realistic, 8K resolution.",
+  "negative_prompt": "low quality, blurry, noisy, grainy, flat lighting, dull colors, distorted shapes, broken lipstick, messy composition, cluttered background, text, watermark, logo, oversharpening, artifacts",
+  "aspect_ratio": "9:16",
+  "style": "luxury cosmetic advertising, playful anthropomorphic surrealism",
+  "lighting": "studio beauty lighting, soft diffused key light with controlled specular highlights",
+  "camera": "straight-on front view, centered composition, product macro look",
+  "quality_tags": [
+    "masterpiece",
+    "ultra-detailed",
+    "hyper-realistic",
+    "8K",
+    "premium",
+    "clean composition"
+  ]
+}

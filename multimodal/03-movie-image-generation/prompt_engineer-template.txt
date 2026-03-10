@@ -1,0 +1,23 @@
+
+
+### The Ultimate 8k Photorealistic Prompt Template
+
+Copy and paste this, filling in the bracketed information with your specific idea:
+
+> **Prompt:** A stunningly ultra-realistic, candid photograph of [INSERT SUBJECT AND ACTION]. The subject is situated in [INSERT ENVIRONMENT/BACKGROUND]. The scene is illuminated by [INSERT LIGHTING, e.g., cinematic rim lighting, golden hour sunlight, harsh neon glow], casting natural, physically accurate shadows. Shot on a [INSERT CAMERA, e.g., Hasselblad H6D-100c, Sony A7R IV], with a [INSERT LENS, e.g., 85mm f/1.4 lens, 35mm prime lens], creating a [INSERT DEPTH OF FIELD, e.g., shallow depth of field with creamy bokeh, deep depth of field]. Unprecedented micro-detail, visible skin pores, individual strands of hair, perfect subsurface scattering, 8k resolution, highly detailed RAW color photograph, Award-winning National Geographic style photography, sharp focus on the [INSERT FOCAL POINT, e.g., subject's eyes], masterpiece.
+
+
+### Example in Action: "The Cyberpunk Mechanic"
+
+If we apply the formula above, here is exactly what you would feed into the AI to get a mind-blowing result:
+
+> **Prompt:** A stunningly ultra-realistic, close-up portrait photograph of a grizzled, older mechanic with oil smudges on his weathered face and a thick, grey beard, intensely looking directly at the camera. The subject is situated in a dimly lit, futuristic garage cluttered with glowing tools. The scene is illuminated by cinematic, high-contrast rim lighting—a mix of warm amber sparks and harsh neon blue overhead lights—casting natural, physically accurate shadows across his wrinkles. Shot on a Hasselblad H6D-100c, with an 85mm f/1.2 lens, creating a shallow depth of field with creamy bokeh blurring the background sparks. Unprecedented micro-detail, visible skin pores, individual strands of hair, perfect subsurface scattering on the skin, 8k resolution, highly detailed RAW color photograph, sharp focus on the subject's hazel eyes, masterpiece.
+
+
+
+### Pro-Tips for Nano Banana 2 Realism
+
+* **Specify the Lens:** Wide angles (14mm-24mm) distort and create drama. Portrait lenses (50mm-85mm) create flattering, realistic proportions.
+* **Mention Lighting by Name:** Use terms like *Rembrandt lighting, butterfly lighting, volumetric haze, bounce light*, or *diffused softbox*. Lighting is 80% of what makes a photo look real.
+* **Embrace Imperfections:** Real photos aren't perfectly smooth. Add words like *film grain, slight chromatic aberration, dust motes, weathered texture*, or *asymmetrical features* to trick the eye into seeing absolute reality.
+
