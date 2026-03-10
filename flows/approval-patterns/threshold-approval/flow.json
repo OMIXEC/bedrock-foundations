@@ -1,0 +1,165 @@
+{
+  "name": "threshold-approval-flow",
+  "description": "Auto-approve refunds under $50, escalate to manager ($50-$500) or director (>$500)",
+  "definition": {
+    "nodes": [
+      {
+        "name": "FlowInput",
+        "type": "Input",
+        "outputs": [
+          {"name": "refund_amount", "type": "Number"},
+          {"name": "customer_id", "type": "String"},
+          {"name": "reason", "type": "String"}
+        ]
+      },
+      {
+        "name": "CheckAmount",
+        "type": "Condition",
+        "inputs": [
+          {"name": "refund_amount", "type": "Number", "expression": "$.data"}
+        ],
+        "configuration": {
+          "condition": {
+            "conditions": [
+              {"name": "under_50", "expression": "$.data < 50"},
+              {"name": "under_500", "expression": "$.data >= 50 && $.data <= 500"},
+              {"name": "over_500", "expression": "$.data > 500"}
+            ]
+          }
+        },
+        "outputs": [
+          {"name": "under_50", "type": "Boolean"},
+          {"name": "under_500", "type": "Boolean"},
+          {"name": "over_500", "type": "Boolean"}
+        ]
+      },
+      {
+        "name": "AutoApprove",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "amount", "type": "Number", "expression": "$.data"},
+          {"name": "customer", "type": "String", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Approve refund of ${{amount}} for customer {{customer}}. Generate approval message."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "approval_message", "type": "String"}]
+      },
+      {
+        "name": "ManagerApproval",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "amount", "type": "Number", "expression": "$.data"},
+          {"name": "reason", "type": "String", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Escalate to manager: Refund ${{amount}}. Reason: {{reason}}. Generate escalation email."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "escalation_message", "type": "String"}]
+      },
+      {
+        "name": "DirectorApproval",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "amount", "type": "Number", "expression": "$.data"},
+          {"name": "reason", "type": "String", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Escalate to director: High-value refund ${{amount}}. Reason: {{reason}}. Generate executive summary."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "executive_summary", "type": "String"}]
+      },
+      {
+        "name": "FlowOutput",
+        "type": "Output",
+        "inputs": [
+          {"name": "result", "type": "String", "expression": "$.data"}
+        ]
+      }
+    ],
+    "connections": [
+      {
+        "name": "InputToCondition",
+        "source": "FlowInput",
+        "target": "CheckAmount",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "refund_amount", "targetInput": "refund_amount"}}
+      },
+      {
+        "name": "AutoApprovePath",
+        "source": "CheckAmount",
+        "target": "AutoApprove",
+        "type": "Conditional",
+        "configuration": {"conditional": {"condition": "under_50"}}
+      },
+      {
+        "name": "ManagerPath",
+        "source": "CheckAmount",
+        "target": "ManagerApproval",
+        "type": "Conditional",
+        "configuration": {"conditional": {"condition": "under_500"}}
+      },
+      {
+        "name": "DirectorPath",
+        "source": "CheckAmount",
+        "target": "DirectorApproval",
+        "type": "Conditional",
+        "configuration": {"conditional": {"condition": "over_500"}}
+      },
+      {
+        "name": "AutoToOutput",
+        "source": "AutoApprove",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "approval_message", "targetInput": "result"}}
+      },
+      {
+        "name": "ManagerToOutput",
+        "source": "ManagerApproval",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "escalation_message", "targetInput": "result"}}
+      },
+      {
+        "name": "DirectorToOutput",
+        "source": "DirectorApproval",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "executive_summary", "targetInput": "result"}}
+      }
+    ]
+  }
+}

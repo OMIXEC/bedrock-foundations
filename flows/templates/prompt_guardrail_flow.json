@@ -1,0 +1,71 @@
+{
+    "name": "sample-prompt-guardrail-flow",
+    "description": "This is a template for a Prompt node with Guardrail. It is used to execute a prompt with a guardrail attached.",
+    "tags": {
+        "Environment": "dev",
+        "Project": "sample-bedrock-prompt-guardrail-flow"
+    },
+    "definition": {
+  "nodes": [
+    {
+      "type": "Input",
+      "name": "FlowInputNode",
+      "outputs": [{ "name": "document", "type": "String" }]
+    },
+    {
+      "type": "Prompt",
+      "name": "GenerateResponse",
+      "configuration": {
+        "prompt": {
+          "sourceConfiguration": {
+            "inline": {
+              "modelId": "$$PROMPT_MODEL_ID",
+              "templateType": "TEXT",
+              "inferenceConfiguration": { "text": { "temperature": 0.7 } },
+              "templateConfiguration": {
+                "text": {
+                  "text": "Task: Generate a response to user query.\n\nInstructions:\n1. Process the input query.\n2. Generate appropriate response.\n\nCustomer Query: {{customerQuery}}\n\nResponse:"
+                }
+              }
+            }
+          },
+          "guardrailConfiguration": {
+            "guardrailIdentifier": "$$GUARDRAIL_ID",
+            "guardrailVersion": "DRAFT"
+          }
+        }
+      },
+      "inputs": [
+        { "name": "customerQuery", "type": "String", "expression": "$.data" }
+      ],
+      "outputs": [{ "name": "modelCompletion", "type": "String" }]
+    },
+    {
+      "type": "Output",
+      "name": "FlowOutput",
+      "inputs": [
+        { "name": "document", "type": "String", "expression": "$.data" }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "name": "Input_to_GenerateResponse",
+      "source": "FlowInputNode",
+      "target": "GenerateResponse",
+      "type": "Data",
+      "configuration": {
+        "data": { "sourceOutput": "document", "targetInput": "customerQuery" }
+      }
+    },
+    {
+      "name": "GenerateResponse_to_Output",
+      "source": "GenerateResponse",
+      "target": "FlowOutput",
+      "type": "Data",
+      "configuration": {
+        "data": { "sourceOutput": "modelCompletion", "targetInput": "document" }
+      }
+    }
+  ]
+}}

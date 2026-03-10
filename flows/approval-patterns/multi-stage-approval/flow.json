@@ -1,0 +1,127 @@
+{
+  "name": "multi-stage-approval-flow",
+  "description": "Sequential approval chain: L1 → L2 → Manager → Director",
+  "definition": {
+    "nodes": [
+      {
+        "name": "FlowInput",
+        "type": "Input",
+        "outputs": [
+          {"name": "request_type", "type": "String"},
+          {"name": "details", "type": "String"},
+          {"name": "priority", "type": "String"}
+        ]
+      },
+      {
+        "name": "ApprovalStages",
+        "type": "Iterator",
+        "inputs": [
+          {"name": "stages", "type": "Array", "expression": "$.data"}
+        ],
+        "outputs": [
+          {"name": "current_stage", "type": "String"},
+          {"name": "stage_index", "type": "Number"}
+        ]
+      },
+      {
+        "name": "StageDecision",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "stage", "type": "String", "expression": "$.data"},
+          {"name": "request", "type": "String", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Stage: {{stage}}. Request: {{request}}. Decide: APPROVE, REJECT, or ESCALATE. Provide reasoning."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "decision", "type": "String"}]
+      },
+      {
+        "name": "CheckDecision",
+        "type": "Condition",
+        "inputs": [
+          {"name": "decision", "type": "String", "expression": "$.data"}
+        ],
+        "configuration": {
+          "condition": {
+            "conditions": [
+              {"name": "approved", "expression": "$.data.includes('APPROVE')"},
+              {"name": "rejected", "expression": "$.data.includes('REJECT')"},
+              {"name": "escalate", "expression": "$.data.includes('ESCALATE')"}
+            ]
+          }
+        },
+        "outputs": [
+          {"name": "approved", "type": "Boolean"},
+          {"name": "rejected", "type": "Boolean"},
+          {"name": "escalate", "type": "Boolean"}
+        ]
+      },
+      {
+        "name": "CollectDecisions",
+        "type": "Collector",
+        "inputs": [
+          {"name": "decision", "type": "String", "expression": "$.data"},
+          {"name": "total_stages", "type": "Number", "expression": "$.data"}
+        ],
+        "outputs": [
+          {"name": "all_decisions", "type": "Array"}
+        ]
+      },
+      {
+        "name": "FlowOutput",
+        "type": "Output",
+        "inputs": [
+          {"name": "final_result", "type": "String", "expression": "$.data"}
+        ]
+      }
+    ],
+    "connections": [
+      {
+        "name": "InputToIterator",
+        "source": "FlowInput",
+        "target": "ApprovalStages",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "request_type", "targetInput": "stages"}}
+      },
+      {
+        "name": "IteratorToDecision",
+        "source": "ApprovalStages",
+        "target": "StageDecision",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "current_stage", "targetInput": "stage"}}
+      },
+      {
+        "name": "DecisionToCondition",
+        "source": "StageDecision",
+        "target": "CheckDecision",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "decision", "targetInput": "decision"}}
+      },
+      {
+        "name": "ConditionToCollector",
+        "source": "CheckDecision",
+        "target": "CollectDecisions",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "approved", "targetInput": "decision"}}
+      },
+      {
+        "name": "CollectorToOutput",
+        "source": "CollectDecisions",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "all_decisions", "targetInput": "final_result"}}
+      }
+    ]
+  }
+}

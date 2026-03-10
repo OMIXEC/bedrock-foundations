@@ -1,0 +1,202 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AWS CloudFormation Template to create an Amazon Bedrock Flow using FlowDefinition",
+    "Parameters": {
+        "AccountId": {
+            "Type": "String",
+            "Description": "AWS Account ID"
+        },
+        "RoleName": {
+            "Type": "String",
+            "Description": "IAM Role Name for Bedrock Flow execution"
+        }
+    },
+    "Resources": {
+        "BedrockFlow": {
+            "Type": "AWS::Bedrock::Flow",
+            "Properties": {
+                "Name": "SimpleFlow_CFN",
+                "ExecutionRoleArn": {
+                    "Fn::Sub": "arn:aws:iam::${AccountId}:role/${RoleName}"
+                },
+                "Description": "A simple flow deployed using Cloud formation.",
+                "Definition": {
+                    "Nodes": [
+                        {
+                            "Type": "Input",
+                            "Name": "FlowInputNode",
+                            "Outputs": [
+                                {
+                                    "Name": "document",
+                                    "Type": "Array"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Iterator",
+                            "Name": "PromptIterator",
+                            "Inputs": [
+                                {
+                                    "Name": "array",
+                                    "Type": "Array",
+                                    "Expression": "$.data"
+                                }
+                            ],
+                            "Outputs": [
+                                {
+                                    "Name": "arrayItem",
+                                    "Type": "String"
+                                },
+                                {
+                                    "Name": "arraySize",
+                                    "Type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Prompt",
+                            "Name": "PromptProcessor",
+                            "Configuration": {
+                                "Prompt": {
+                                    "SourceConfiguration": {
+                                        "Inline": {
+                                            "ModelId": "anthropic.claude-3-sonnet-20240229-v1:0",
+                                            "TemplateType": "TEXT",
+                                            "InferenceConfiguration": {
+                                                "Text": {
+                                                    "Temperature": 0.7,
+                                                    "TopP": 1
+                                                }
+                                            },
+                                            "TemplateConfiguration": {
+                                                "Text": {
+                                                    "Text": "{{userPrompt}}"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "Inputs": [
+                                {
+                                    "Name": "userPrompt",
+                                    "Type": "String",
+                                    "Expression": "$.data"
+                                }
+                            ],
+                            "Outputs": [
+                                {
+                                    "Name": "modelCompletion",
+                                    "Type": "String"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Collector",
+                            "Name": "ResponseCollector",
+                            "Inputs": [
+                                {
+                                    "Name": "arrayItem",
+                                    "Type": "String",
+                                    "Expression": "$.data"
+                                },
+                                {
+                                    "Name": "arraySize",
+                                    "Type": "Number",
+                                    "Expression": "$.data"
+                                }
+                            ],
+                            "Outputs": [
+                                {
+                                    "Name": "collectedArray",
+                                    "Type": "Array"
+                                }
+                            ]
+                        },
+                        {
+                            "Type": "Output",
+                            "Name": "FlowOutput",
+                            "Inputs": [
+                                {
+                                    "Name": "document",
+                                    "Type": "Array",
+                                    "Expression": "$.data"
+                                }
+                            ]
+                        }
+                    ],
+                    "Connections": [
+                        {
+                            "Name": "Input_to_Iterator",
+                            "Source": "FlowInputNode",
+                            "Target": "PromptIterator",
+                            "Type": "Data",
+                            "Configuration": {
+                                "Data": {
+                                    "SourceOutput": "document",
+                                    "TargetInput": "array"
+                                }
+                            }
+                        },
+                        {
+                            "Name": "Iterator_to_Prompt",
+                            "Source": "PromptIterator",
+                            "Target": "PromptProcessor",
+                            "Type": "Data",
+                            "Configuration": {
+                                "Data": {
+                                    "SourceOutput": "arrayItem",
+                                    "TargetInput": "userPrompt"
+                                }
+                            }
+                        },
+                        {
+                            "Name": "Prompt_to_Collector",
+                            "Source": "PromptProcessor",
+                            "Target": "ResponseCollector",
+                            "Type": "Data",
+                            "Configuration": {
+                                "Data": {
+                                    "SourceOutput": "modelCompletion",
+                                    "TargetInput": "arrayItem"
+                                }
+                            }
+                        },
+                        {
+                            "Name": "Iterator_to_Collector_Size",
+                            "Source": "PromptIterator",
+                            "Target": "ResponseCollector",
+                            "Type": "Data",
+                            "Configuration": {
+                                "Data": {
+                                    "SourceOutput": "arraySize",
+                                    "TargetInput": "arraySize"
+                                }
+                            }
+                        },
+                        {
+                            "Name": "Collector_to_Output",
+                            "Source": "ResponseCollector",
+                            "Target": "FlowOutput",
+                            "Type": "Data",
+                            "Configuration": {
+                                "Data": {
+                                    "SourceOutput": "collectedArray",
+                                    "TargetInput": "document"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "BedrockFlowArn": {
+            "Description": "The ARN of the Bedrock Flow",
+            "Value": {
+                "Ref": "BedrockFlow"
+            }
+        }
+    }
+}

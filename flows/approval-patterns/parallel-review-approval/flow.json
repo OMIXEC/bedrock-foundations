@@ -1,0 +1,165 @@
+{
+  "name": "parallel-review-approval-flow",
+  "description": "Unanimous approval required from legal, finance, and operations",
+  "definition": {
+    "nodes": [
+      {
+        "name": "FlowInput",
+        "type": "Input",
+        "outputs": [
+          {"name": "contract_details", "type": "String"},
+          {"name": "amount", "type": "Number"}
+        ]
+      },
+      {
+        "name": "LegalReview",
+        "type": "Prompt",
+        "inputs": [{"name": "contract", "type": "String", "expression": "$.data"}],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Legal review: {{contract}}. Check compliance, liability, terms. APPROVE or REJECT with reasoning."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "legal_decision", "type": "String"}]
+      },
+      {
+        "name": "FinanceReview",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "contract", "type": "String", "expression": "$.data"},
+          {"name": "amount", "type": "Number", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Finance review: {{contract}}. Amount: ${{amount}}. Check budget, ROI, payment terms. APPROVE or REJECT."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "finance_decision", "type": "String"}]
+      },
+      {
+        "name": "OperationsReview",
+        "type": "Prompt",
+        "inputs": [{"name": "contract", "type": "String", "expression": "$.data"}],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Operations review: {{contract}}. Check feasibility, resources, timeline. APPROVE or REJECT."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "ops_decision", "type": "String"}]
+      },
+      {
+        "name": "CollectReviews",
+        "type": "Collector",
+        "inputs": [
+          {"name": "legal", "type": "String", "expression": "$.data"},
+          {"name": "finance", "type": "String", "expression": "$.data"},
+          {"name": "ops", "type": "String", "expression": "$.data"}
+        ],
+        "outputs": [{"name": "all_reviews", "type": "Array"}]
+      },
+      {
+        "name": "CheckUnanimous",
+        "type": "Condition",
+        "inputs": [{"name": "reviews", "type": "Array", "expression": "$.data"}],
+        "configuration": {
+          "condition": {
+            "conditions": [
+              {"name": "all_approved", "expression": "$.data.every(r => r.includes('APPROVE'))"}
+            ]
+          }
+        },
+        "outputs": [{"name": "unanimous", "type": "Boolean"}]
+      },
+      {
+        "name": "FlowOutput",
+        "type": "Output",
+        "inputs": [{"name": "result", "type": "String", "expression": "$.data"}]
+      }
+    ],
+    "connections": [
+      {
+        "name": "InputToLegal",
+        "source": "FlowInput",
+        "target": "LegalReview",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "contract_details", "targetInput": "contract"}}
+      },
+      {
+        "name": "InputToFinance",
+        "source": "FlowInput",
+        "target": "FinanceReview",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "contract_details", "targetInput": "contract"}}
+      },
+      {
+        "name": "InputToOps",
+        "source": "FlowInput",
+        "target": "OperationsReview",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "contract_details", "targetInput": "contract"}}
+      },
+      {
+        "name": "LegalToCollector",
+        "source": "LegalReview",
+        "target": "CollectReviews",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "legal_decision", "targetInput": "legal"}}
+      },
+      {
+        "name": "FinanceToCollector",
+        "source": "FinanceReview",
+        "target": "CollectReviews",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "finance_decision", "targetInput": "finance"}}
+      },
+      {
+        "name": "OpsToCollector",
+        "source": "OperationsReview",
+        "target": "CollectReviews",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "ops_decision", "targetInput": "ops"}}
+      },
+      {
+        "name": "CollectorToCondition",
+        "source": "CollectReviews",
+        "target": "CheckUnanimous",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "all_reviews", "targetInput": "reviews"}}
+      },
+      {
+        "name": "ConditionToOutput",
+        "source": "CheckUnanimous",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "unanimous", "targetInput": "result"}}
+      }
+    ]
+  }
+}

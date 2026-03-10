@@ -1,0 +1,87 @@
+{
+    "name": "sample-knowledgebase-flow",
+    "description": "This is a template for a knowledgebase node. It is used to run the query against a knowledgebase and get the response.",
+    "tags": {
+        "Environment": "dev",
+        "Project": "sample-bedrock-rag-flow"
+    },
+    "definition": {
+    "connections": [
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "document",
+                    "targetInput": "retrievalQuery"
+                }
+            },
+            "name": "FlowInputNodeFlowInputNode0ToDocumentRetrievalKnowledgeBaseNode0",
+            "source": "FlowInputNode",
+            "target": "DocumentRetrieval",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "outputText",
+                    "targetInput": "document"
+                }
+            },
+            "name": "DocumentRetrievalKnowledgeBaseNode0ToFlowOutputFlowOutputNode0",
+            "source": "DocumentRetrieval",
+            "target": "FlowOutput",
+            "type": "Data"
+        }
+    ],
+    "nodes": [
+        {
+            "configuration": {
+                "input": {}
+            },
+            "name": "FlowInputNode",
+            "outputs": [
+                {
+                    "name": "document",
+                    "type": "String"
+                }
+            ],
+            "type": "Input"
+        },
+        {
+            "configuration": {
+                "knowledgeBase": {
+                    "knowledgeBaseId": "$$KNOWLEDGEBASE_ID",
+                    "modelId": "$$KNOWLEDGEBASE_MODEL_ID"
+                }
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "retrievalQuery",
+                    "type": "String"
+                }
+            ],
+            "name": "DocumentRetrieval",
+            "outputs": [
+                {
+                    "name": "outputText",
+                    "type": "String"
+                }
+            ],
+            "type": "KnowledgeBase"
+        },
+        {
+            "configuration": {
+                "output": {}
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "document",
+                    "type": "String"
+                }
+            ],
+            "name": "FlowOutput",
+            "type": "Output"
+        }
+    ]
+}}

@@ -1,0 +1,287 @@
+{
+    "name": "sample-condition-flow",
+    "description": "This is a template for a condition node. It is used to conditionally execute a prompt or a knowledge base.",
+    "tags": {
+        "Environment": "dev",
+        "Project": "sample-bedrock-condition-flow"
+    },
+    "definition": {
+    "connections": [
+        {
+            "configuration": {
+                "conditional": {
+                    "condition": "Condition"
+                }
+            },
+            "name": "ConditionNode_1ConditionNodeHandle0ToKnowledgeBaseNode_1KnowledgeBaseNode_1HeaderHandle",
+            "source": "ConditionNode_1",
+            "target": "KnowledgeBaseNode_1",
+            "type": "Conditional"
+        },
+        {
+            "configuration": {
+                "conditional": {
+                    "condition": "default"
+                }
+            },
+            "name": "ConditionNode_1ConditionNodeHandleDefaultConditionNode_1ToPrompt_answer_professionallyPrompt_2HeaderHandle",
+            "source": "ConditionNode_1",
+            "target": "Prompt_answer_professionally",
+            "type": "Conditional"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "modelCompletion",
+                    "targetInput": "document"
+                }
+            },
+            "name": "Prompt_answer_professionallyPromptsNode0ToFlowOutputNode_LLMFlowOutputNode0",
+            "source": "Prompt_answer_professionally",
+            "target": "FlowOutputNode_LLM",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "outputText",
+                    "targetInput": "document"
+                }
+            },
+            "name": "KnowledgeBaseNode_1KnowledgeBaseNode0ToFlowOutputNode_KBFlowOutputNode0",
+            "source": "KnowledgeBaseNode_1",
+            "target": "FlowOutputNode_KB",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "document",
+                    "targetInput": "input"
+                }
+            },
+            "name": "FlowInputNodeFlowInputNode0ToPrompt_categorize_inputPromptsNode0",
+            "source": "FlowInputNode",
+            "target": "Prompt_categorize_input",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "modelCompletion",
+                    "targetInput": "conditionInput"
+                }
+            },
+            "name": "Prompt_categorize_inputPromptsNode0ToConditionNode_1ConditionNode0",
+            "source": "Prompt_categorize_input",
+            "target": "ConditionNode_1",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "document",
+                    "targetInput": "retrievalQuery"
+                }
+            },
+            "name": "FlowInputNodeFlowInputNode0ToKnowledgeBaseNode_1KnowledgeBaseNode0",
+            "source": "FlowInputNode",
+            "target": "KnowledgeBaseNode_1",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "document",
+                    "targetInput": "input"
+                }
+            },
+            "name": "FlowInputNodeFlowInputNode0ToPrompt_answer_professionallyPromptsNode0",
+            "source": "FlowInputNode",
+            "target": "Prompt_answer_professionally",
+            "type": "Data"
+        }
+    ],
+    "nodes": [
+        {
+            "configuration": {
+                "input": {}
+            },
+            "name": "FlowInputNode",
+            "outputs": [
+                {
+                    "name": "document",
+                    "type": "String"
+                }
+            ],
+            "type": "Input"
+        },
+        {
+            "configuration": {
+                "output": {}
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "document",
+                    "type": "String"
+                }
+            ],
+            "name": "FlowOutputNode_LLM",
+            "type": "Output"
+        },
+        {
+            "configuration": {
+                "condition": {
+                    "conditions": [
+                        {
+                            "expression": "conditionInput == \"DOCUMENTATION\"",
+                            "name": "Condition"
+                        },
+                        {
+                            "name": "default"
+                        }
+                    ]
+                }
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "conditionInput",
+                    "type": "String"
+                }
+            ],
+            "name": "ConditionNode_1",
+            "type": "Condition"
+        },
+        {
+            "configuration": {
+                "knowledgeBase": {
+                    "knowledgeBaseId": "$$KNOWLEDGEBASE_ID",
+                    "modelId": "$$KNOWLEDGEBASE_MODEL_ID"
+                }
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "retrievalQuery",
+                    "type": "String"
+                }
+            ],
+            "name": "KnowledgeBaseNode_1",
+            "outputs": [
+                {
+                    "name": "outputText",
+                    "type": "String"
+                }
+            ],
+            "type": "KnowledgeBase"
+        },
+        {
+            "configuration": {
+                "prompt": {
+                    "sourceConfiguration": {
+                        "inline": {
+                            "inferenceConfiguration": {
+                                "text": {
+                                    "maxTokens": 2000,
+                                    "stopSequences": [],
+                                    "temperature": 0.8,
+                                    "topP": 0.9990000128746033
+                                }
+                            },
+                            "modelId": "$$PROMPT_MODEL_ID",
+                            "templateConfiguration": {
+                                "text": {
+                                    "inputVariables": [
+                                        {
+                                            "name": "input"
+                                        }
+                                    ],
+                                    "text": "Give a succinct answer in a professional tone for query {{input}}"
+                                }
+                            },
+                            "templateType": "TEXT"
+                        }
+                    }
+                }
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "input",
+                    "type": "String"
+                }
+            ],
+            "name": "Prompt_answer_professionally",
+            "outputs": [
+                {
+                    "name": "modelCompletion",
+                    "type": "String"
+                }
+            ],
+            "type": "Prompt"
+        },
+        {
+            "configuration": {
+                "output": {}
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "document",
+                    "type": "String"
+                }
+            ],
+            "name": "FlowOutputNode_KB",
+            "type": "Output"
+        },
+        {
+            "configuration": {
+                "prompt": {
+                    "sourceConfiguration": {
+                        "inline": {
+                            "inferenceConfiguration": {
+                                "text": {
+                                    "maxTokens": 2000,
+                                    "stopSequences": [
+                                        "\n\nHuman:"
+                                    ],
+                                    "temperature": 1,
+                                    "topP": 0.9990000128746033
+                                }
+                            },
+                            "modelId": "$$PROMPT_CLASSIFY_INPUT_MODEL_ID",
+                            "templateConfiguration": {
+                                "text": {
+                                    "inputVariables": [
+                                        {
+                                            "name": "input"
+                                        }
+                                    ],
+                                    "text": "Classify user input into:\n\"DOCUMENTATION\" - for documentation specific or related queries\n\"GENERIC\" - for general questions.\nOnly respond with category.\nUser Input: {{input}}"
+                                }
+                            },
+                            "templateType": "TEXT"
+                        }
+                    }
+                }
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "input",
+                    "type": "String"
+                }
+            ],
+            "name": "Prompt_categorize_input",
+            "outputs": [
+                {
+                    "name": "modelCompletion",
+                    "type": "String"
+                }
+            ],
+            "type": "Prompt"
+        }
+    ]
+}}

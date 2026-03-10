@@ -1,0 +1,469 @@
+
+Project Overview: Day Trip Advisor
+add openweather support with public api
+Goal: Generate day trip plans based on a city and simulated weather, persisting the result to different S3 buckets based on the weather condition.
+Components:
+Lambda: Simulates weather (Sunny/Snowy) with OpenTelemetry instrumentation.
+Bedrock Guardrail: Blocks Health/Financial advice.
+Bedrock Prompt: Generates the itinerary using the Nova Micro model.
+Bedrock Flow: Orchestrates the input, Lambda, Prompt, logic, and S3 persistence.
+
+1. Bedrock Flow Definition (JSON)
+Save this content as flow-definition.json. This file defines the visual workflow structure (Nodes and Connections) exactly as built in the video.
+JSON
+{
+  "nodes": [
+    {
+      "name": "FlowInput",
+      "type": "Input",
+      "outputs": [
+        {
+          "name": "document",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "MyTripLambda",
+      "type": "LambdaFunction",
+      "configuration": {
+        "lambdaFunction": {
+          "lambdaArn": "${LAMBDA_ARN}" 
+        }
+      },
+      "inputs": [
+        {
+          "name": "city",
+          "type": "String",
+          "expression": "$.data"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "functionResponse",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "MyCityPrompt",
+      "type": "Prompt",
+      "configuration": {
+        "prompt": {
+          "sourceConfiguration": {
+            "resource": {
+              "promptArn": "${PROMPT_ARN}"
+            }
+          }
+        },
+        "guardrail": {
+          "guardrailIdentifier": "${GUARDRAIL_ID}",
+          "guardrailVersion": "DRAFT"
+        }
+      },
+      "inputs": [
+        {
+          "name": "City",
+          "type": "String",
+          "expression": "$.data"
+        },
+        {
+          "name": "Weather",
+          "type": "String",
+          "expression": "$.data"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "modelCompletion",
+          "type": "String"
+        }
+      ]
+    },
+    {
+      "name": "MyWeatherCondition",
+      "type": "Condition",
+      "configuration": {
+        "condition": {
+          "conditions": [
+            {
+              "name": "IsSnowy",
+              "expression": "equals(MyTripLambda.functionResponse, 'Snow')"
+            }
+          ]
+        }
+      },
+      "inputs": [
+        {
+          "name": "weatherInput",
+          "type": "String",
+          "expression": "$.data"
+        }
+      ]
+    },
+    {
+      "name": "MySunnyTrips",
+      "type": "Storage",
+      "configuration": {
+        "storage": {
+          "serviceS3": {
+            "bucketName": "${SUNNY_BUCKET_NAME}"
+          }
+        }
+      },
+      "inputs": [
+        {
+          "name": "content",
+          "type": "String",
+          "expression": "$.data"
+        },
+        {
+          "name": "objectKey",
+          "type": "String",
+          "expression": "$.data"
+        }
+      ]
+    },
+    {
+      "name": "MySnowyTrips",
+      "type": "Storage",
+      "configuration": {
+        "storage": {
+          "serviceS3": {
+            "bucketName": "${SNOWY_BUCKET_NAME}"
+          }
+        }
+      },
+      "inputs": [
+        {
+          "name": "content",
+          "type": "String",
+          "expression": "$.data"
+        },
+        {
+          "name": "objectKey",
+          "type": "String",
+          "expression": "$.data"
+        }
+      ]
+    },
+    {
+      "name": "FlowOutput",
+      "type": "Output",
+      "inputs": [
+        {
+          "name": "document",
+          "type": "String",
+          "expression": "$.data"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "source": "FlowInput",
+      "target": "MyTripLambda",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "document",
+          "targetInput": "city"
+        }
+      }
+    },
+    {
+      "source": "FlowInput",
+      "target": "MyCityPrompt",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "document",
+          "targetInput": "City"
+        }
+      }
+    },
+    {
+      "source": "MyTripLambda",
+      "target": "MyCityPrompt",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "functionResponse",
+          "targetInput": "Weather"
+        }
+      }
+    },
+    {
+      "source": "MyCityPrompt",
+      "target": "FlowOutput",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "modelCompletion",
+          "targetInput": "document"
+        }
+      }
+    },
+    {
+      "source": "MyTripLambda",
+      "target": "MyWeatherCondition",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "functionResponse",
+          "targetInput": "weatherInput"
+        }
+      }
+    },
+    {
+      "source": "MyWeatherCondition",
+      "target": "MySnowyTrips",
+      "type": "Conditional",
+      "configuration": {
+        "conditional": {
+          "condition": "IsSnowy"
+        }
+      }
+    },
+    {
+      "source": "MyWeatherCondition",
+      "target": "MySunnyTrips",
+      "type": "Conditional",
+      "configuration": {
+        "conditional": {
+          "condition": "default"
+        }
+      }
+    },
+    {
+      "source": "FlowInput",
+      "target": "MySunnyTrips",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "document",
+          "targetInput": "objectKey"
+        }
+      }
+    },
+    {
+      "source": "MyCityPrompt",
+      "target": "MySunnyTrips",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "modelCompletion",
+          "targetInput": "content"
+        }
+      }
+    },
+    {
+      "source": "FlowInput",
+      "target": "MySnowyTrips",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "document",
+          "targetInput": "objectKey"
+        }
+      }
+    },
+    {
+      "source": "MyCityPrompt",
+      "target": "MySnowyTrips",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "modelCompletion",
+          "targetInput": "content"
+        }
+      }
+    }
+  ]
+}
+
+2. CDK Import Code (TypeScript)
+This CDK stack creates all resources: buckets, the Lambda with OpenTelemetry, the Guardrail, Prompt, and the Flow.
+Prerequisites:
+npm install aws-cdk-lib constructs
+flow-definition.json (from above) placed in the same directory.
+TypeScript
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as bedrock from 'aws-cdk-lib/aws-bedrock';
+import * as fs from 'fs';
+import * as path from 'path';
+
+export class DayTripAdvisorStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
+
+    // 1. S3 Buckets for persistence
+    const sunnyBucket = new s3.Bucket(this, 'SunnyTripsBucket', {
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+    });
+
+    const snowyBucket = new s3.Bucket(this, 'SnowyTripsBucket', {
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
+    });
+
+    // 2. Lambda Function with OpenTelemetry (ADOT)
+    // We use the AWS Distro for OpenTelemetry Lambda layer
+    const otelLayerArn = 'arn:aws:lambda:us-east-1:901920570463:layer:aws-otel-python-amd64-ver-1-25-0:1'; // Check latest ARN for your region
+    const otelLayer = lambda.LayerVersion.fromLayerVersionArn(this, 'OtelLayer', otelLayerArn);
+
+    const weatherLambda = new lambda.Function(this, 'WeatherLambda', {
+      runtime: lambda.Runtime.PYTHON_3_12,
+      handler: 'index.handler',
+      code: lambda.Code.fromInline(`
+import random
+import json
+
+def handler(event, context):
+    # Simple logic from video: 0 or 1
+    weather = "Snow" if random.random() < 0.5 else "Sunny"
+    print(f"Generated Weather: {weather}")
+    return weather
+      `),
+      layers: [otelLayer],
+      environment: {
+        'AWS_LAMBDA_EXEC_WRAPPER': '/opt/otel-instrument', // Enables auto-instrumentation
+        'OPENTELEMETRY_COLLECTOR_CONFIG_FILE': '/var/task/collector.yaml' // Optional: if you provide custom config
+      },
+      tracing: lambda.Tracing.ACTIVE, // Enable X-Ray/Active tracing
+    });
+
+    // Grant Bedrock permission to invoke this Lambda
+    const bedrockPrincipal = new iam.ServicePrincipal('bedrock.amazonaws.com');
+    weatherLambda.grantInvoke(bedrockPrincipal);
+
+    // 3. Bedrock Guardrail
+    const guardrail = new bedrock.CfnGuardrail(this, 'TripAdvisorGuardrail', {
+      name: 'TripAdvisorGuardrail',
+      blockedInputMessaging: 'Sorry, but this trip advisor cannot answer this particular question.',
+      blockedOutputsMessaging: 'Response blocked by guardrail.',
+      topicPolicyConfig: {
+        topicsConfig: [
+          {
+            name: 'HealthAdvisor',
+            definition: 'Avoid providing medical, medication, or prescription advice.',
+            examples: ['What medicine should I take?', 'Is this symptom dangerous?'],
+            type: 'DENY',
+          },
+          {
+            name: 'FinancialAdvisor',
+            definition: 'Avoid providing monetary, investment, or crypto advice.',
+            examples: ['Where should I invest?', 'Is Bitcoin good?'],
+            type: 'DENY',
+          }
+        ]
+      },
+      contentPolicyConfig: {
+        filtersConfig: [
+          { type: 'SEXUAL', inputStrength: 'HIGH', outputStrength: 'HIGH' },
+          { type: 'VIOLENCE', inputStrength: 'HIGH', outputStrength: 'HIGH' },
+          { type: 'HATE', inputStrength: 'HIGH', outputStrength: 'HIGH' },
+          { type: 'INSULTS', inputStrength: 'HIGH', outputStrength: 'HIGH' }
+        ]
+      }
+    });
+
+    // 4. Bedrock Prompt
+    const prompt = new bedrock.CfnPrompt(this, 'DayTripPrompt', {
+      name: 'MyDayTripAdvisorPrompt',
+      defaultVariant: 'variant-one',
+      variants: [{
+        name: 'variant-one',
+        templateType: 'TEXT',
+        modelId: 'amazon.nova-micro-v1:0', // Ensure this model is enabled in your region
+        templateConfiguration: {
+          text: {
+            text: 'Provide a day trip plan to anyone traveling to {{City}}, depending on the local weather {{Weather}}.'
+          }
+        },
+        inferenceConfiguration: {
+          text: {
+            temperature: 0.7,
+            maxTokens: 1000
+          }
+        }
+      }]
+    });
+
+    // 5. IAM Role for Bedrock Flow
+    const flowRole = new iam.Role(this, 'BedrockFlowRole', {
+      assumedBy: new iam.ServicePrincipal('bedrock.amazonaws.com'),
+    });
+    
+    // Grant permissions to invoke Lambda and write to S3
+    weatherLambda.grantInvoke(flowRole);
+    sunnyBucket.grantReadWrite(flowRole);
+    snowyBucket.grantReadWrite(flowRole);
+    
+    // Grant permission to invoke the specific prompt
+    flowRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:GetPrompt', 'bedrock:RenderPrompt'],
+      resources: [prompt.attrArn]
+    }));
+
+    // 6. Bedrock Flow
+    // Read the JSON definition and replace placeholders
+    let flowDefinitionRaw = fs.readFileSync(path.join(__dirname, 'flow-definition.json'), 'utf8');
+    flowDefinitionRaw = flowDefinitionRaw.replace('${LAMBDA_ARN}', weatherLambda.functionArn);
+    flowDefinitionRaw = flowDefinitionRaw.replace('${PROMPT_ARN}', prompt.attrArn);
+    flowDefinitionRaw = flowDefinitionRaw.replace('${GUARDRAIL_ID}', guardrail.attrGuardrailId);
+    flowDefinitionRaw = flowDefinitionRaw.replace('${SUNNY_BUCKET_NAME}', sunnyBucket.bucketName);
+    flowDefinitionRaw = flowDefinitionRaw.replace('${SNOWY_BUCKET_NAME}', snowyBucket.bucketName);
+
+    const flowDefinition = JSON.parse(flowDefinitionRaw);
+
+    const flow = new bedrock.CfnFlow(this, 'DayTripFlow', {
+      name: 'MyDayTripPlan',
+      executionRoleArn: flowRole.roleArn,
+      definition: flowDefinition
+    });
+
+    // Output the Flow ID and Alias for testing
+    new cdk.CfnOutput(this, 'FlowId', { value: flow.attrFlowId });
+  }
+}
+
+3. AWS CLI Upload Instructions
+If you prefer to upload the JSON workflow manually via AWS CLI instead of using CDK, follow these steps.
+1. Prepare the JSON file: Ensure you replace the ${...} placeholders in flow-definition.json with your actual resource ARNs (Lambda ARN, Prompt ARN, etc.) manually.
+2. Create the Flow via CLI: Run the following command. Note that you must create the IAM Role (BedrockFlowRole) manually first and attach the necessary policies (S3 write, Lambda invoke).
+Bash
+aws bedrock-agent create-flow \
+    --name "MyDayTripPlan" \
+    --description "Flow created via CLI" \
+    --execution-role-arn "arn:aws:iam::YOUR_ACCOUNT_ID:role/BedrockFlowRole" \
+    --definition file://flow-definition.json \
+    --region us-east-1
+3. Prepare the Flow for use: Bedrock flows must be versioned and aliased before they can be invoked.
+Bash
+# 1. Prepare (Version) the flow
+aws bedrock-agent prepare-flow --flow-identifier <flow-id-from-previous-step>
+
+# 2. Create an Alias (e.g., 'live')
+aws bedrock-agent create-flow-alias \
+    --flow-identifier <flow-id-from-previous-step> \
+    --name "live" \
+    --routing-configuration "[{\"flowVersion\": \"1\"}]"
+4. Test the Flow:
+
+Hands on lab - Using Amazon Bedrock Flows create a day trip advisor
+NamrataHShah · 2.2K‏ צפיות
+
+
+Bash
+aws bedrock-agent-runtime invoke-flow \
+    --flow-identifier <flow-id> \
+    --flow-alias-identifier <alias-id> \
+    --inputs "[{\"content\": {\"document\": \"Paris\"}, \"nodeName\": \"FlowInput\", \"nodeOutputName\": \"document\"}]"
+
+

@@ -1,0 +1,231 @@
+{
+  "name": "conditional-routing-approval-flow",
+  "description": "Dynamic routing to appropriate approvers based on request type and department",
+  "definition": {
+    "nodes": [
+      {
+        "name": "FlowInput",
+        "type": "Input",
+        "outputs": [
+          {"name": "request_type", "type": "String"},
+          {"name": "department", "type": "String"},
+          {"name": "amount", "type": "Number"},
+          {"name": "details", "type": "String"}
+        ]
+      },
+      {
+        "name": "ClassifyRequest",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "request_type", "type": "String", "expression": "$.data"},
+          {"name": "department", "type": "String", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Classify request: Type={{request_type}}, Dept={{department}}. Route to: IT_MANAGER, MARKETING_DIRECTOR, OPS_SUPERVISOR, or FINANCE_CONTROLLER"}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "approver", "type": "String"}]
+      },
+      {
+        "name": "RouteToApprover",
+        "type": "Condition",
+        "inputs": [{"name": "approver", "type": "String", "expression": "$.data"}],
+        "configuration": {
+          "condition": {
+            "conditions": [
+              {"name": "it_manager", "expression": "$.data.includes('IT_MANAGER')"},
+              {"name": "marketing_director", "expression": "$.data.includes('MARKETING_DIRECTOR')"},
+              {"name": "ops_supervisor", "expression": "$.data.includes('OPS_SUPERVISOR')"},
+              {"name": "finance_controller", "expression": "$.data.includes('FINANCE_CONTROLLER')"}
+            ]
+          }
+        },
+        "outputs": [
+          {"name": "it_manager", "type": "Boolean"},
+          {"name": "marketing_director", "type": "Boolean"},
+          {"name": "ops_supervisor", "type": "Boolean"},
+          {"name": "finance_controller", "type": "Boolean"}
+        ]
+      },
+      {
+        "name": "ITManagerApproval",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "details", "type": "String", "expression": "$.data"},
+          {"name": "amount", "type": "Number", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "IT Manager review: {{details}}. Amount: ${{amount}}. Check technical feasibility, security. APPROVE or REJECT."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "decision", "type": "String"}]
+      },
+      {
+        "name": "MarketingDirectorApproval",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "details", "type": "String", "expression": "$.data"},
+          {"name": "amount", "type": "Number", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Marketing Director review: {{details}}. Amount: ${{amount}}. Check brand alignment, ROI. APPROVE or REJECT."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "decision", "type": "String"}]
+      },
+      {
+        "name": "OpsApproval",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "details", "type": "String", "expression": "$.data"},
+          {"name": "amount", "type": "Number", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Operations Supervisor review: {{details}}. Amount: ${{amount}}. Check operational impact. APPROVE or REJECT."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "decision", "type": "String"}]
+      },
+      {
+        "name": "FinanceApproval",
+        "type": "Prompt",
+        "inputs": [
+          {"name": "details", "type": "String", "expression": "$.data"},
+          {"name": "amount", "type": "Number", "expression": "$.data"}
+        ],
+        "configuration": {
+          "prompt": {
+            "sourceConfiguration": {
+              "inline": {
+                "modelId": "anthropic.claude-3-5-sonnet-20241022-v2:0",
+                "templateType": "TEXT",
+                "inferenceConfiguration": {"text": {"temperature": 0.3}},
+                "templateConfiguration": {
+                  "text": {"text": "Finance Controller review: {{details}}. Amount: ${{amount}}. Check budget availability. APPROVE or REJECT."}
+                }
+              }
+            }
+          }
+        },
+        "outputs": [{"name": "decision", "type": "String"}]
+      },
+      {
+        "name": "FlowOutput",
+        "type": "Output",
+        "inputs": [{"name": "result", "type": "String", "expression": "$.data"}]
+      }
+    ],
+    "connections": [
+      {
+        "name": "InputToClassify",
+        "source": "FlowInput",
+        "target": "ClassifyRequest",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "request_type", "targetInput": "request_type"}}
+      },
+      {
+        "name": "ClassifyToRoute",
+        "source": "ClassifyRequest",
+        "target": "RouteToApprover",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "approver", "targetInput": "approver"}}
+      },
+      {
+        "name": "RouteToIT",
+        "source": "RouteToApprover",
+        "target": "ITManagerApproval",
+        "type": "Conditional",
+        "configuration": {"conditional": {"condition": "it_manager"}}
+      },
+      {
+        "name": "RouteToMarketing",
+        "source": "RouteToApprover",
+        "target": "MarketingDirectorApproval",
+        "type": "Conditional",
+        "configuration": {"conditional": {"condition": "marketing_director"}}
+      },
+      {
+        "name": "RouteToOps",
+        "source": "RouteToApprover",
+        "target": "OpsApproval",
+        "type": "Conditional",
+        "configuration": {"conditional": {"condition": "ops_supervisor"}}
+      },
+      {
+        "name": "RouteToFinance",
+        "source": "RouteToApprover",
+        "target": "FinanceApproval",
+        "type": "Conditional",
+        "configuration": {"conditional": {"condition": "finance_controller"}}
+      },
+      {
+        "name": "ITToOutput",
+        "source": "ITManagerApproval",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "decision", "targetInput": "result"}}
+      },
+      {
+        "name": "MarketingToOutput",
+        "source": "MarketingDirectorApproval",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "decision", "targetInput": "result"}}
+      },
+      {
+        "name": "OpsToOutput",
+        "source": "OpsApproval",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "decision", "targetInput": "result"}}
+      },
+      {
+        "name": "FinanceToOutput",
+        "source": "FinanceApproval",
+        "target": "FlowOutput",
+        "type": "Data",
+        "configuration": {"data": {"sourceOutput": "decision", "targetInput": "result"}}
+      }
+    ]
+  }
+}

@@ -1,0 +1,120 @@
+{
+    "name": "sample-agentic-flow",
+    "description": "This is a template for an Agent Node. Flow demonstrates user input handled by an agent.",
+    "tags": {
+        "Environment": "dev",
+        "Project": "sample-bedrock-agentic-flow"
+    },
+    "definition": {
+    "connections": [
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "document",
+                    "targetInput": "agentInputText"
+                }
+            },
+            "name": "FlowInputNodeFlowInputNode0ToAgentsNode_1AgentsNode0",
+            "source": "FlowInputNode",
+            "target": "AgentsNode_1",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "agentResponse",
+                    "targetInput": "agentInputText"
+                }
+            },
+            "name": "AgentsNode_1AgentsNode0ToAgentsNode_2AgentsNode0",
+            "source": "AgentsNode_1",
+            "target": "AgentsNode_2",
+            "type": "Data"
+        },
+        {
+            "configuration": {
+                "data": {
+                    "sourceOutput": "agentResponse",
+                    "targetInput": "document"
+                }
+            },
+            "name": "AgentsNode_2AgentsNode0ToFlowOutputNode_1FlowOutputNode0",
+            "source": "AgentsNode_2",
+            "target": "FlowOutputNode_1",
+            "type": "Data"
+        }
+    ],
+    "nodes": [
+        {
+            "configuration": {
+                "input": {}
+            },
+            "name": "FlowInputNode",
+            "outputs": [
+                {
+                    "name": "document",
+                    "type": "String"
+                }
+            ],
+            "type": "Input"
+        },
+        {
+            "configuration": {
+                "agent": {
+                    "agentAliasArn": "$$AGENT_1_ALIAS_ARN"
+                }
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "agentInputText",
+                    "type": "String"
+                }
+            ],
+            "name": "AgentsNode_1",
+            "outputs": [
+                {
+                    "name": "agentResponse",
+                    "type": "String"
+                }
+            ],
+            "type": "Agent"
+        },
+        {
+            "configuration": {
+                "agent": {
+                    "agentAliasArn": "$$AGENT_2_ALIAS_ARN"
+                }
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "agentInputText",
+                    "type": "String"
+                }
+            ],
+            "name": "AgentsNode_2",
+            "outputs": [
+                {
+                    "name": "agentResponse",
+                    "type": "String"
+                }
+            ],
+            "type": "Agent"
+        },
+        {
+            "configuration": {
+                "output": {}
+            },
+            "inputs": [
+                {
+                    "expression": "$.data",
+                    "name": "document",
+                    "type": "String"
+                }
+            ],
+            "name": "FlowOutputNode_1",
+            "type": "Output"
+        }
+    ]
+}}

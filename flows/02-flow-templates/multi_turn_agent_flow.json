@@ -1,0 +1,87 @@
+{
+  "name": "sample-multi-turn-agentic-flow",
+  "description": "This is a flow template for a Multi-turn Agent Node. Flow demonstrates a multi-turn conversation flow with an agent.",
+  "tags": {
+    "Environment": "dev",
+    "Project": "sample-bedrock-multi-turn-agentic-flow"
+  },
+  "definition": {
+    "connections": [
+      {
+        "configuration": {
+          "data": {
+            "sourceOutput": "document",
+            "targetInput": "agentInputText"
+          }
+        },
+        "name": "FlowInputNodeFlowInputNode0ToAgentsNode_1AgentsNode0",
+        "source": "FlowInputNode",
+        "target": "AgentsNode_1",
+        "type": "Data"
+      },
+      {
+        "configuration": {
+          "data": {
+            "sourceOutput": "agentResponse",
+            "targetInput": "document"
+          }
+        },
+        "name": "AgentsNode_1AgentsNode0ToFlowOutputNode_1FlowOutputNode0",
+        "source": "AgentsNode_1",
+        "target": "FlowOutputNode_1",
+        "type": "Data"
+      }
+    ],
+    "nodes": [
+      {
+        "configuration": {
+          "input": {}
+        },
+        "name": "FlowInputNode",
+        "outputs": [
+          {
+            "name": "document",
+            "type": "String"
+          }
+        ],
+        "type": "Input"
+      },
+      {
+        "configuration": {
+          "output": {}
+        },
+        "inputs": [
+          {
+            "expression": "$.data",
+            "name": "document",
+            "type": "String"
+          }
+        ],
+        "name": "FlowOutputNode_1",
+        "type": "Output"
+      },
+      {
+        "configuration": {
+          "agent": {
+            "agentAliasArn": "$$MULTI_TURN_AGENT_ALIAS_ARN"
+          }
+        },
+        "inputs": [
+          {
+            "expression": "$.data",
+            "name": "agentInputText",
+            "type": "String"
+          }
+        ],
+        "name": "AgentsNode_1",
+        "outputs": [
+          {
+            "name": "agentResponse",
+            "type": "String"
+          }
+        ],
+        "type": "Agent"
+      }
+    ]
+  }
+}

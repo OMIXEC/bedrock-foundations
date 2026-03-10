@@ -1,0 +1,113 @@
+{
+    "name": "sample-iterator-collector-flow",
+    "description": "This is a template for an Iterator and Collector Node. Template demonstrates a Flow that Iterates over an array of input, sends them to prompt and collects the results for display.",
+    "tags": {
+        "Environment": "dev",
+        "Project": "sample-bedrock-iterator-collector-flow"
+    },
+    "definition": {
+  "nodes": [
+    {
+      "type": "Input",
+      "name": "FlowInputNode",
+      "outputs": [{ "name": "document", "type": "Array" }]
+    },
+    {
+      "type": "Iterator",
+      "name": "PromptIterator",
+      "inputs": [{ "name": "array", "type": "Array", "expression": "$.data" }],
+      "outputs": [
+        { "name": "arrayItem", "type": "String" },
+        { "name": "arraySize", "type": "Number" }
+      ]
+    },
+    {
+      "type": "Prompt",
+      "name": "PromptProcessor",
+      "configuration": {
+        "prompt": {
+          "sourceConfiguration": {
+            "inline": {
+              "modelId": "$$PROMPT_MODEL_ID",
+              "templateType": "TEXT",
+              "inferenceConfiguration": {
+                "text": { "temperature": 0.7, "topP": 1 }
+              },
+              "templateConfiguration": { "text": { "text": "{{userPrompt}}" } }
+            }
+          }
+        }
+      },
+      "inputs": [
+        { "name": "userPrompt", "type": "String", "expression": "$.data" }
+      ],
+      "outputs": [{ "name": "modelCompletion", "type": "String" }]
+    },
+    {
+      "type": "Collector",
+      "name": "ResponseCollector",
+      "inputs": [
+        { "name": "arrayItem", "type": "String", "expression": "$.data" },
+        { "name": "arraySize", "type": "Number", "expression": "$.data" }
+      ],
+      "outputs": [{ "name": "collectedArray", "type": "Array" }]
+    },
+    {
+      "type": "Output",
+      "name": "FlowOutput",
+      "inputs": [
+        { "name": "document", "type": "Array", "expression": "$.data" }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "name": "Input_to_Iterator",
+      "source": "FlowInputNode",
+      "target": "PromptIterator",
+      "type": "Data",
+      "configuration": {
+        "data": { "sourceOutput": "document", "targetInput": "array" }
+      }
+    },
+    {
+      "name": "Iterator_to_Prompt",
+      "source": "PromptIterator",
+      "target": "PromptProcessor",
+      "type": "Data",
+      "configuration": {
+        "data": { "sourceOutput": "arrayItem", "targetInput": "userPrompt" }
+      }
+    },
+    {
+      "name": "Prompt_to_Collector",
+      "source": "PromptProcessor",
+      "target": "ResponseCollector",
+      "type": "Data",
+      "configuration": {
+        "data": {
+          "sourceOutput": "modelCompletion",
+          "targetInput": "arrayItem"
+        }
+      }
+    },
+    {
+      "name": "Iterator_to_Collector_Size",
+      "source": "PromptIterator",
+      "target": "ResponseCollector",
+      "type": "Data",
+      "configuration": {
+        "data": { "sourceOutput": "arraySize", "targetInput": "arraySize" }
+      }
+    },
+    {
+      "name": "Collector_to_Output",
+      "source": "ResponseCollector",
+      "target": "FlowOutput",
+      "type": "Data",
+      "configuration": {
+        "data": { "sourceOutput": "collectedArray", "targetInput": "document" }
+      }
+    }
+  ]
+}}
