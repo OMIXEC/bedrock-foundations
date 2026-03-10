@@ -1,0 +1,1091 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folarin Favour Olaoluwapo - Cloud Engineer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --secondary: #6366f1;
+            --dark: #0f172a;
+            --light: #f8fafc;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .skill-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .skill-icon:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 8px var(--primary));
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+        }
+        
+        .project-card {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+        
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .project-overlay {
+            background: rgba(14, 165, 233, 0.8);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 15s infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            25% {
+                transform: translateY(-20px) translateX(10px);
+            }
+            50% {
+                transform: translateY(-10px) translateX(20px);
+            }
+            75% {
+                transform: translateY(10px) translateX(-10px);
+            }
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+        }
+        
+        .btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover:after {
+            left: 100%;
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold gradient-text">Folarin.dev</a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-slate-300 hover:text-sky-400 transition-colors">About</a>
+                    <a href="#projects" class="text-slate-300 hover:text-sky-400 transition-colors">Projects</a>
+                    <a href="#skills" class="text-slate-300 hover:text-sky-400 transition-colors">Skills</a>
+                    <a href="#contact" class="text-slate-300 hover:text-sky-400 transition-colors">Contact</a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="mobile-menu absolute top-full left-0 w-full bg-slate-900 border-b border-slate-800 md:hidden">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex flex-col space-y-3">
+                    <a href="#about" class="text-slate-300 hover:text-sky-400 transition-colors py-2">About</a>
+                    <a href="#projects" class="text-slate-300 hover:text-sky-400 transition-colors py-2">Projects</a>
+                    <a href="#skills" class="text-slate-300 hover:text-sky-400 transition-colors py-2">Skills</a>
+                    <a href="#contact" class="text-slate-300 hover:text-sky-400 transition-colors py-2">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <div class="hero-particles">
+            <!-- Particles will be added via JS -->
+        </div>
+        
+        <div class="container mx-auto px-4 py-16 relative z-10">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4">
+                        <span class="block">Hi, I'm</span>
+                        <span class="gradient-text">Folarin Favour Olaoluwapo</span>
+                    </h1>
+                    <div class="h-1 w-24 gradient-bg mb-6 rounded-full"></div>
+                    <h2 class="text-xl md:text-2xl text-slate-300 mb-6">
+                        <span class="block mb-2">Cloud Engineer | Web Developer | Automation Expert</span>
+                        <span class="text-sky-400">Transforming ideas into scalable solutions</span>
+                    </h2>
+                    <p class="text-slate-400 mb-8 max-w-lg">
+                        Specializing in AWS cloud architecture, full-stack development, and intelligent automation solutions. 
+                        I build secure, scalable, and innovative digital experiences.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#projects" class="btn px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">
+                            View My Work
+                        </a>
+                        <a href="#contact" class="btn px-6 py-3 bg-transparent hover:bg-slate-800 text-white border border-sky-500 rounded-md font-medium">
+                            Get In Touch
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+    <div class="relative w-64 h-64 md:w-80 md:h-80">
+        <!-- Pulsing outer ring -->
+        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 animate-pulse-slow"></div>
+        
+        <!-- Inner container with your image -->
+        <div class="absolute inset-1 rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
+            <img 
+                src="/images/myImg.jpg" 
+                alt="Folarin Favour Olaoluwapo" 
+                class="w-full h-full object-cover rounded-full"
+            />
+        </div>
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-slate-400 hover:text-sky-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-slate-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">About Me</h2>
+                <div class="h-1 w-24 gradient-bg mx-auto mb-6 rounded-full"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    I'm a Cloud Engineer with expertise in AWS services, web development, and automation solutions.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card p-6 rounded-xl">
+                    <div class="text-sky-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Security</h3>
+                    <p class="text-slate-400">
+                        Implementing robust security measures with AWS Cognito, IAM, and security best practices to protect cloud infrastructure.
+                    </p>
+                </div>
+                
+                <div class="card p-6 rounded-xl">
+                    <div class="text-sky-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Networking</h3>
+                    <p class="text-slate-400">
+                        Designing and implementing scalable network architectures using VPC, subnets, and advanced routing solutions.
+                    </p>
+                </div>
+                
+                <div class="card p-6 rounded-xl">
+                    <div class="text-sky-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Databases</h3>
+                    <p class="text-slate-400">
+                        Working with DynamoDB, MongoDB, and other database solutions to create efficient data storage systems.
+                    </p>
+                </div>
+                
+                <div class="card p-6 rounded-xl">
+                    <div class="text-sky-400 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">AI/ML</h3>
+                    <p class="text-slate-400">
+                        Leveraging AWS Lex, Bedrock, and other AI/ML services to build intelligent applications and solutions.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-slate-800/50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My Projects</h2>
+                <div class="h-1 w-24 gradient-bg mx-auto mb-6 rounded-full"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Explore my latest work across web development, cloud solutions, and automation.
+                </p>
+            </div>
+            
+            <!-- Project Tabs -->
+            <div class="mb-12">
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <button class="tab-button active px-6 py-3 rounded-full text-white font-medium" data-tab="web">
+                        🌐 Web Development
+                    </button>
+                    <button class="tab-button px-6 py-3 rounded-full text-white font-medium bg-slate-700/50" data-tab="cloud">
+                        ☁️ Cloud Projects
+                    </button>
+                    <button class="tab-button px-6 py-3 rounded-full text-white font-medium bg-slate-700/50" data-tab="automation">
+                        🤖 Automation & AI
+                    </button>
+                </div>
+                
+                <!-- Web Development Projects -->
+                <div class="tab-content active" id="web-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Project 1 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-sky-500 to-indigo-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">E-Commerce Platform</h3>
+                                <p class="text-slate-400 mb-4">
+                                    A responsive e-commerce site built with Node.js, Express, and MongoDB with secure payment integration.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Node.js</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Express</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">MongoDB</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">View Project</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 2 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Portfolio Dashboard</h3>
+                                <p class="text-slate-400 mb-4">
+                                    A modern dashboard built with React and Tailwind CSS featuring data visualization.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">React</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Tailwind CSS</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Chart.js</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">View Project</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 3 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Responsive Blog</h3>
+                                <p class="text-slate-400 mb-4">
+                                    A fully responsive blog platform with CMS integration and modern UI design.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">HTML5</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">CSS3</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">JavaScript</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cloud Projects -->
+                <div class="tab-content hidden" id="cloud-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Project 1 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-sky-500 to-cyan-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Serverless API</h3>
+                                <p class="text-slate-400 mb-4">
+                                    A scalable serverless web app built with AWS Lambda, API Gateway, and DynamoDB.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Lambda</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">API Gateway</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">DynamoDB</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">View Project</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 2 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Secure Authentication</h3>
+                                <p class="text-slate-400 mb-4">
+                                    A secure user authentication system using AWS Cognito with MFA support.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Cognito</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">IAM</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Lambda</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">View Project</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 3 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">Data Pipeline</h3>
+                                <p class="text-slate-400 mb-4">
+                                    An ETL data pipeline using AWS services for real-time data processing.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">S3</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Glue</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Athena</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Automation & AI Projects -->
+                <div class="tab-content hidden" id="automation-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Project 1 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-violet-500 to-purple-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">AI Chatbot</h3>
+                                <p class="text-slate-400 mb-4">
+                                    An intelligent chatbot built with AWS Lex and Lambda for customer support.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Lex</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Lambda</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">DynamoDB</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">View Project</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 2 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-fuchsia-500 to-pink-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">n8n Workflow</h3>
+                                <p class="text-slate-400 mb-4">
+                                    Automated business processes using n8n for seamless integration between systems.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">n8n</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">API</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Webhooks</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">View Project</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Project 3 -->
+                        <div class="project-card rounded-xl overflow-hidden bg-slate-900 shadow-lg">
+                            <div class="relative h-48 overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-r from-rose-500 to-red-500 opacity-90 flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                    </svg>
+                                </div>
+                                <div class="project-overlay absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <span class="text-white font-medium">View Project</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold mb-2">ML Prediction Model</h3>
+                                <p class="text-slate-400 mb-4">
+                                    A machine learning model deployed on AWS Bedrock for predictive analytics.
+                                </p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Bedrock</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">SageMaker</span>
+                                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-sky-400">Lambda</span>
+                                </div>
+                                <a href="#" class="btn inline-block px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 bg-slate-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">My Skills</h2>
+                <div class="h-1 w-24 gradient-bg mx-auto mb-6 rounded-full"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    A comprehensive overview of my technical expertise and tools I work with.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                <!-- AWS -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-orange-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.75 11.25H15a.75.75 0 0 1-.75-.75V7.5A.75.75 0 0 1 15 6.75h3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75zM15 9.75h3v-2.25h-3z"/>
+                            <path d="M18.75 18H15a.75.75 0 0 1-.75-.75v-3a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75zM15 16.5h3v-2.25h-3z"/>
+                            <path d="M9.75 18H6a.75.75 0 0 1-.75-.75v-3A.75.75 0 0 1 6 13.5h3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75zM6 16.5h3v-2.25H6z"/>
+                            <path d="M9.75 11.25H6a.75.75 0 0 1-.75-.75V7.5A.75.75 0 0 1 6 6.75h3.75a.75.75 0 0 1 .75.75v3a.75.75 0 0 1-.75.75zM6 9.75h3V7.5H6z"/>
+                            <path d="M12 3.75a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5zM12 21a9.75 9.75 0 1 1 0-19.5 9.75 9.75 0 0 1 0 19.5z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">AWS</span>
+                </div>
+                
+                <!-- Node.js -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 21.985c-.275 0-.532-.074-.772-.202l-2.439-1.448c-.365-.204-.182-.278-.072-.32.496-.165.588-.201 1.101-.493.056-.027.129-.016.185.015l1.87 1.12c.074.036.166.036.228 0l7.364-4.246c.064-.037.116-.127.116-.207V7.808c0-.088-.052-.17-.116-.207l-7.364-4.246c-.064-.037-.155-.037-.228 0L4.517 7.6c-.064.037-.116.12-.116.207v8.492c0 .088.052.17.116.207l2 1.158c1.082.54 1.762-.095 1.762-.735V8.526c0-.124.092-.215.207-.215h.932c.116 0 .207.091.207.215v8.403c0 1.432-.779 2.252-2.138 2.252-.418 0-.747 0-1.667-.453l-1.88-1.08A1.536 1.536 0 0 1 3 16.42V7.93c0-.546.291-1.054.771-1.325l7.364-4.246c.464-.262 1.084-.262 1.549 0l7.364 4.246c.48.271.771.779.771 1.325v8.492c0 .546-.291 1.054-.771 1.325l-7.364 4.246c-.24.136-.499.202-.774.202zm2.316-5.739c-3.222 0-3.896-1.48-3.896-2.724 0-.116.093-.215.207-.215h.949c.103 0 .191.074.207.176.14 1.031.556 1.53 2.533 1.53 1.569 0 2.232-.353 2.232-1.188 0-.477-.19-.837-2.611-1.074-2.023-.198-3.275-.646-3.275-2.265 0-1.493 1.256-2.384 3.358-2.384 2.368 0 3.55.82 3.698 2.588.005.066-.016.127-.062.176-.045.045-.108.074-.174.074h-.95c-.097 0-.182-.07-.198-.165-.22-1.001-.761-1.319-2.314-1.319-1.705 0-1.905.595-1.905 1.037 0 .54.233.696 2.528.996 2.272.302 3.358.73 3.358 2.33 0 1.61-1.339 2.545-3.673 2.545l-.002.017z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">Node.js</span>
+                </div>
+                
+                <!-- MongoDB -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-600" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0 1 11.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 0 0 3.639-8.464c.01-.814-.103-1.662-.197-2.218zm-5.336 8.195s0-8.291.275-8.29c.213 0 .49 10.695.49 10.695-.381-.045-.765-1.76-.765-2.405z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">MongoDB</span>
+                </div>
+                
+                <!-- Express -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M24 18.588a1.529 1.529 0 0 1-1.895-.72l-3.45-4.771-.5-.667-4.003 5.444a1.466 1.466 0 0 1-1.802.708l5.158-6.92-4.798-6.251a1.595 1.595 0 0 1 1.9.666l3.576 4.83 3.596-4.81a1.435 1.435 0 0 1 1.788-.668L21.708 7.9l-2.522 3.283a.666.666 0 0 0 0 .994l4.804 6.412zM.002 11.576l.42-2.075c1.154-4.103 5.858-5.81 9.094-3.27 1.895 1.489 2.368 3.597 2.275 5.973H1.116C.943 16.447 4.005 19.009 7.92 17.7a4.078 4.078 0 0 0 2.582-2.876c.207-.666.548-.78 1.174-.588a5.417 5.417 0 0 1-2.589 3.957 6.272 6.272 0 0 1-7.306-.933 6.575 6.575 0 0 1-1.64-3.858c0-.235-.08-.455-.134-.666A88.33 88.33 0 0 1 0 11.577zm1.127-.286h9.654c-.06-3.076-2.001-5.258-4.59-5.278-2.882-.04-4.944 2.094-5.071 5.264z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">Express</span>
+                </div>
+                
+                <!-- HTML5 -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.564-2.438L1.5 0zm7.031 9.75l-.232-2.718 10.059.003.23-2.622L5.412 4.41l.698 8.01h9.126l-.326 3.426-2.91.804-2.955-.81-.188-2.11H6.248l.33 4.171L12 19.351l5.379-1.443.744-8.157H8.531z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">HTML5</span>
+                </div>
+                
+                <!-- CSS3 -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M1.5 0h21l-1.91 21.563L11.977 24l-8.565-2.438L1.5 0zm17.09 4.413L5.41 4.41l.213 2.622 10.125.002-.255 2.716h-6.64l.24 2.573h6.182l-.366 3.523-2.91.804-2.956-.81-.188-2.11h-2.61l.29 3.855L12 19.288l5.373-1.53L18.59 4.414v-.001z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">CSS3</span>
+                </div>
+                
+                <!-- JavaScript -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M0 0h24v24H0V0zm22.034 18.276c-.175-1.095-.888-2.015-3.003-2.873-.736-.345-1.554-.585-1.797-1.14-.091-.33-.105-.51-.046-.705.15-.646.915-.84 1.515-.66.39.12.75.42.976.9 1.034-.676 1.034-.676 1.755-1.125-.27-.42-.404-.601-.586-.78-.63-.705-1.469-1.065-2.834-1.034l-.705.089c-.676.165-1.32.525-1.71 1.005-1.14 1.291-.811 3.541.569 4.471 1.365 1.02 3.361 1.244 3.616 2.205.24 1.17-.87 1.545-1.966 1.41-.811-.18-1.26-.586-1.755-1.336l-1.83 1.051c.21.48.45.689.81 1.109 1.74 1.756 6.09 1.666 6.871-1.004.029-.09.24-.705.074-1.65l.046.067zm-8.983-7.245h-2.248c0 1.938-.009 3.864-.009 5.805 0 1.232.063 2.363-.138 2.711-.33.689-1.18.601-1.566.48-.396-.196-.597-.466-.83-.855-.063-.105-.11-.196-.127-.196l-1.825 1.125c.305.63.75 1.172 1.324 1.517.855.51 2.004.675 3.207.405.783-.226 1.458-.691 1.811-1.411.51-.93.402-2.07.397-3.346.012-2.054 0-4.109 0-6.179l.004-.056z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">JavaScript</span>
+                </div>
+                
+                <!-- Tailwind -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cyan-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12.001,4.8c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 C13.666,10.618,15.027,12,18.001,12c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C16.337,6.182,14.976,4.8,12.001,4.8z M6.001,12c-3.2,0-5.2,1.6-6,4.8c1.2-1.6,2.6-2.2,4.2-1.8c0.913,0.228,1.565,0.89,2.288,1.624 c1.177,1.194,2.538,2.576,5.512,2.576c3.2,0,5.2-1.6,6-4.8c-1.2,1.6-2.6,2.2-4.2,1.8c-0.913-0.228-1.565-0.89-2.288-1.624 C10.337,13.382,8.976,12,6.001,12z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">Tailwind</span>
+                </div>
+                
+                <!-- Bootstrap -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20 0H4C1.793.006.006 1.793 0 4v16c0 2.2 1.8 4 4 4h16c2.2 0 4-1.8 4-4V4c0-2.2-1.8-4-4-4zm-2.187 16.855c-.2.482-.517.907-.923 1.234-.42.34-.952.62-1.607.82-.654.203-1.432.305-2.333.305H6.518v-14h6.802c1.258 0 2.266.283 3.02.86.76.58 1.138 1.444 1.138 2.61 0 .705-.172 1.31-.518 1.81-.344.497-.84.886-1.48 1.156v.046c.854.18 1.515.585 1.95 1.215.435.63.658 1.426.658 2.387 0 .538-.104 1.05-.3 1.528l.025.027zm-2.776-3.45c-.41-.375-.986-.558-1.73-.558H8.985v4.368h4.334c.74 0 1.32-.192 1.73-.58.41-.385.62-.934.62-1.64-.007-.69-.21-1.224-.62-1.59h-.017zm-.6-2.823c.396-.336.59-.817.59-1.444 0-.704-.175-1.204-.53-1.49-.352-.285-.86-.433-1.528-.433h-4v3.863h4c.583 0 1.08-.17 1.464-.496z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">Bootstrap</span>
+                </div>
+                
+                <!-- n8n -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 22c5.522 0 10-4.477 10-10S17.522 2 12 2 2 6.477 2 12s4.478 10 10 10zm-2.357-4.38v-2.148L13.13 12l-3.487-3.471v-2.15L16.87 12l-7.227 5.62z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">n8n</span>
+                </div>
+                
+                <!-- Lambda -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-orange-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21.984 8.272v7.449l-9.984 5.731-9.984-5.744V8.272L12 14.024l9.984-5.752zM12 3.475L2.016 9.227v5.497l9.984 5.744 9.984-5.744V9.227L12 3.475z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">Lambda</span>
+                </div>
+                
+                <!-- DynamoDB -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 4.248c-3.148-5.402-12-3.825-12 2.944 0 4.661 5.571 9.427 12 15.808 6.43-6.381 12-11.147 12-15.808 0-6.792-8.875-8.306-12-2.944z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">DynamoDB</span>
+                </div>
+                
+                <!-- Lex -->
+                <div class="skill-icon flex flex-col items-center">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-400" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 1c-6.338 0-12 4.226-12 10.007 0 2.05.739 4.063 2.047 5.625.055 1.83-1.023 4.456-1.993 6.368 2.602-.47 6.301-1.508 7.978-2.536 9.236 2.247 15.968-3.405 15.968-9.457C24 5.226 18.338 1 12 1zm-5.204 9.335c-.789 0-1.438-.724-1.438-1.612s.649-1.612 1.438-1.612 1.438.724 1.438 1.612-.649 1.612-1.438 1.612zm5.204 0c-.788 0-1.438-.724-1.438-1.612s.65-1.612 1.438-1.612c.789 0 1.438.724 1.438 1.612s-.649 1.612-1.438 1.612zm5.204 0c-.788 0-1.438-.724-1.438-1.612s.65-1.612 1.438-1.612c.789 0 1.438.724 1.438 1.612s-.649 1.612-1.438 1.612z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm text-slate-300">Lex & Bedrock</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-slate-800/50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+                <div class="h-1 w-24 gradient-bg mx-auto mb-6 rounded-full"></div>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    Have a project in mind or want to collaborate? Feel free to reach out!
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="card p-8 rounded-xl">
+                        <h3 class="text-2xl font-semibold mb-4">Contact Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-sky-500/20 flex items-center justify-center mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                        <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-400">Email</p>
+                                    <a href="mailto:folarin@example.com" class="text-sky-400 hover:text-sky-300">folarin@example.com</a>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-sky-500/20 flex items-center justify-center mr-4">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-400" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-400">Location</p>
+                                    <p class="text-white">Remote / Worldwide</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="text-lg font-medium mb-4">Connect With Me</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-10 h-10 rounded-full bg-slate-700 hover:bg-blue-600 flex items-center justify-center transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/>
+                                    </svg>
+                                </a>
+                                
+                                <a href="#" class="w-10 h-10 rounded-full bg-slate-700 hover:bg-blue-500 flex items-center justify-center transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                                    </svg>
+                                </a>
+                                
+                                <a href="#" class="w-10 h-10 rounded-full bg-slate-700 hover:bg-black flex items-center justify-center transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                    </svg>
+                                </a>
+                                
+                                <a href="#" class="w-10 h-10 rounded-full bg-slate-700 hover:bg-black flex items-center justify-center transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                                
+                                <a href="#" class="w-10 h-10 rounded-full bg-slate-700 hover:bg-green-600 flex items-center justify-center transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card p-8 rounded-xl">
+                        <h3 class="text-2xl font-semibold mb-4">Send Me a Message</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label for="name" class="block text-sm font-medium text-slate-400 mb-1">Name</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 rounded-md bg-slate-800 border border-slate-700 focus:border-sky-500 focus:outline-none text-white">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="email" class="block text-sm font-medium text-slate-400 mb-1">Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-2 rounded-md bg-slate-800 border border-slate-700 focus:border-sky-500 focus:outline-none text-white">
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="subject" class="block text-sm font-medium text-slate-400 mb-1">Subject</label>
+                                <input type="text" id="subject" class="w-full px-4 py-2 rounded-md bg-slate-800 border border-slate-700 focus:border-sky-500 focus:outline-none text-white">
+                            </div>
+                            
+                            <div class="mb-6">
+                                <label for="message" class="block text-sm font-medium text-slate-400 mb-1">Message</label>
+                                <textarea id="message" rows="4" class="w-full px-4 py-2 rounded-md bg-slate-800 border border-slate-700 focus:border-sky-500 focus:outline-none text-white"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn w-full px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-md font-medium">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Add this just before the closing </body> tag -->
+<!-- Floating Action Button -->
+<button id="chatButton" class="fixed bottom-8 right-8 z-50 px-6 py-4 bg-gradient-to-r from-sky-500 to-indigo-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 animate-pulse-slow flex items-center gap-2">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Chat with My Portfolio
+</button>
+
+<!-- Chat Modal -->
+<div id="chatModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="card max-w-lg w-full p-8 rounded-xl relative bg-slate-900/80 backdrop-blur-md border border-slate-800">
+    <div class="chat-header flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold gradient-text">Chat with My Portfolio 💬</h2>
+      <div class="modal-controls flex items-center gap-4">
+        <label class="text-slate-400 text-sm flex items-center gap-2">
+          <input type="checkbox" id="knowledgeBaseToggle" class="h-4 w-4 text-sky-500 focus:ring-sky-500 rounded" />
+          Talk to AI directly
+        </label>
+        <button id="closeChat" class="text-slate-400 hover:text-sky-400">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="chat-messages max-h-96 overflow-y-auto mb-4 p-4 bg-slate-800 rounded-md" id="chatMessages">
+      <!-- Messages will be added here dynamically -->
+    </div>
+    <div class="chat-input flex gap-2">
+      <input type="text" id="messageInput" placeholder="Type your message..." class="w-full px-4 py-2 rounded-md bg-slate-900 border border-slate-700 focus:border-sky-500 focus:outline-none text-white">
+      <button id="sendButton" class="btn px-4 py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-md">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Add this to your existing <style> section -->
+<style>
+.chat-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.chat-messages::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+.message {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  max-width: 80%;
+}
+.user-message {
+  background: var(--primary);
+  color: white;
+  margin-left: auto;
+}
+.bot-message {
+  background: var(--dark);
+  color: var(--light);
+  margin-right: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.loading-message {
+  display: flex;
+  align-items: center;
+}
+.typing-indicator {
+  display: flex;
+  gap: 0.25rem;
+}
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes typing {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+</style>
+
+<!-- JavaScript for Modal and Chat -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // Modal controls
+  const chatButton = document.getElementById("chatButton");
+  const chatModal = document.getElementById("chatModal");
+  const closeChat = document.getElementById("closeChat");
+  const messageInput = document.getElementById("messageInput");
+  const sendButton = document.getElementById("sendButton");
+  const chatMessages = document.getElementById("chatMessages");
+  const knowledgeBaseToggle = document.getElementById("knowledgeBaseToggle");
+
+  chatButton.addEventListener("click", () => {
+    chatModal.classList.remove("hidden");
+    messageInput.focus();
+  });
+
+  closeChat.addEventListener("click", () => {
+    chatModal.classList.add("hidden");
+  });
+
+  chatModal.addEventListener("click", (e) => {
+    if (e.target === chatModal) {
+      chatModal.classList.add("hidden");
+    }
+  });
+
+  function addMessage(text, isUser = false, isLoading = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${isUser ? "user-message" : "bot-message"}`;
+    if (isLoading) {
+      messageDiv.className += " loading-message";
+      messageDiv.innerHTML = `
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      `;
+    } else {
+      messageDiv.textContent = text;
+    }
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return messageDiv;
+  }
+
+  async function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text) return;
+
+    addMessage(text, true);
+    messageInput.value = "";
+    const loadingMessage = addMessage("", false, true);
+
+    // Placeholder for Bedrock API call
+    const endpoint = knowledgeBaseToggle.checked ? "/bedrock/invoke" : "/bedrock/query";
+    try {
+      // Replace this with your Bedrock API call
+      const response = await fetch(`${endpoint}?text=${encodeURIComponent(text)}`);
+      const data = await response.json();
+      loadingMessage.remove();
+      addMessage(data.response || "Placeholder response from Bedrock");
+    } catch (error) {
+      console.error("Error:", error);
+      loadingMessage.remove();
+      addMessage("Sorry, something went wrong. Please try again.");
+    }
+  }
+
+  sendButton.addEventListener("click", sendMessage);
+  messageInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+});
+</script>

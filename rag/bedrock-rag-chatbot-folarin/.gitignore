@@ -1,0 +1,43 @@
+# Node.js dependencies
+/node_modules/
+
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Optional build outputs
+/build/
+dist/
+
+# VS Code
+.vscode/
+
+# Coverage results
+coverage/
+
+# Local AWS credentials (if any)
+/.aws/
+
+# Serverless/CloudFormation output (if used)
+.serverless/
+
+# JetBrains IDE
+.idea/
+
+# S3 uploads (if stored locally during dev)
+public/uploads/
