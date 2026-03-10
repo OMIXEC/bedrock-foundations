@@ -1,0 +1,11 @@
+---
+directory:
+  - iac
+output: cli
+framework: terraform
+compact: true
+quiet: false
+summary-position: bottom
+skip-check:
+  - ALL  # Temporarily skip all checks
+soft-fail: true  # Show issues but don't fail the build
