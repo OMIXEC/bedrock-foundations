@@ -1,0 +1,35 @@
+environment: dev
+
+bedrock:
+  model_id: "anthropic.claude-sonnet-4-5-20250929-v1:0"
+  region: "us-east-1"
+  max_tokens: 4096
+  temperature: 0.7
+
+dynamodb:
+  connections_table: "chatbot-connections-dev"
+  conversations_table: "chatbot-conversations-dev"
+  ttl_days: 30
+  region: "us-east-1"
+
+conversation:
+  max_history_messages: 20
+  summarization_trigger: 15
+  system_prompt: |
+    You are a helpful insurance customer support assistant.
+    Your role is to:
+    - Answer questions about insurance policies, claims, and coverage
+    - Help customers understand their benefits
+    - Guide customers through common processes
+    - Be friendly, professional, and empathetic
+    - If you don't know something, say so and offer to connect them with a specialist
+
+    Always maintain customer privacy and never make up policy details.
+
+logging:
+  level: "INFO"
+  json_format: true
+
+websocket:
+  connection_timeout_seconds: 600
+  max_message_size_bytes: 32768

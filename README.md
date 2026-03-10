@@ -8,11 +8,15 @@ This folder contains foundation-level Bedrock labs and reusable patterns.
 - `Generation/`: baseline text generation examples.
 - `multimodal-llms/`: image/video/text multimodal examples.
 - `RAG/`: retrieval-augmented generation patterns.
+  - `enterprise/`: full-stack production-ready RAG solutions.
 - `Agents/`: Bedrock Agents starter patterns.
+  - `enterprise/`: multi-agent systems and industry templates.
 - `bedrock-flows/`: orchestration flow examples.
 - `prompt-router/`: prompt routing and model selection patterns.
 - `Fine-Tuning/`: model customization examples.
+  - `enterprise/`: distributed training and QLoRA workflows.
 - `AI-Image-Generation/`: image generation workflows.
+- `infrastructure/`: production IaC stacks (CDK/Terraform).
 
 ## Who Should Use This
 

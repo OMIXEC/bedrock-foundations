@@ -1,0 +1,215 @@
+# CloudSync Pro - Troubleshooting Guide
+
+## Sync Issues
+
+### Files Not Syncing
+**Symptoms**: Files are not appearing on other devices, sync status shows "Pending"
+
+**Possible Causes and Solutions**:
+
+1. **Network connectivity issues**
+   - Check your internet connection is active
+   - Try accessing https://status.cloudsync.com to verify service status
+   - Disable VPN temporarily to test if it's blocking sync
+
+2. **Insufficient storage space**
+   - Check available storage on your device
+   - Free up at least 10% of total disk space
+   - Consider using selective sync to reduce local storage usage
+
+3. **File name restrictions**
+   - CloudSync doesn't support: \ / : * ? " < > |
+   - File names must be less than 255 characters
+   - Rename files with special characters
+
+4. **Large file upload limits**
+   - Free plan: 250 MB per file
+   - Professional plan: 2 GB per file
+   - Business/Enterprise: 10 GB per file
+   - For larger files, contact support for Enterprise plan
+
+### Sync Conflicts
+**Symptoms**: Files have "(conflicted copy)" appended to the name
+
+**What causes conflicts**:
+- Same file edited on multiple devices while offline
+- Simultaneous edits by multiple users
+- File modified during sync interruption
+
+**Resolution steps**:
+1. Open both files (original and conflicted copy)
+2. Manually merge changes you want to keep
+3. Delete the conflicted copy file
+4. Original file will sync to all devices
+
+**Preventing conflicts**:
+- Enable "auto-save" in applications
+- Use CloudSync's real-time collaboration features
+- Check file lock status before editing shared files
+
+## API Error Codes
+
+### Authentication Errors
+
+**401 Unauthorized**
+- **Cause**: Invalid or expired access token
+- **Solution**: Refresh your access token using the refresh token
+- **Code example**:
+  ```
+  POST /oauth/token
+  {
+    "grant_type": "refresh_token",
+    "refresh_token": "your_refresh_token"
+  }
+  ```
+
+**403 Forbidden**
+- **Cause**: Valid token but insufficient permissions
+- **Solution**:
+  - Check if API key has required scopes
+  - Verify user has access to the requested resource
+  - Contact account admin to adjust permissions
+
+### Rate Limiting
+
+**429 Too Many Requests**
+- **Cause**: API rate limit exceeded
+- **Limits**:
+  - Free: 100 requests/hour
+  - Professional: 1,000 requests/hour
+  - Business: 10,000 requests/hour
+  - Enterprise: Custom limits
+- **Response headers**:
+  - X-RateLimit-Limit: Total requests allowed
+  - X-RateLimit-Remaining: Requests remaining
+  - X-RateLimit-Reset: Unix timestamp when limit resets
+- **Solution**:
+  - Implement exponential backoff
+  - Cache responses when possible
+  - Consider upgrading plan for higher limits
+  - Use webhooks instead of polling
+
+### Server Errors
+
+**500 Internal Server Error**
+- **Cause**: Unexpected error on CloudSync servers
+- **Solution**:
+  - Retry the request after 30 seconds
+  - Check https://status.cloudsync.com for incidents
+  - If persistent, contact support with request ID from response headers
+
+**503 Service Unavailable**
+- **Cause**: Scheduled maintenance or temporary overload
+- **Solution**:
+  - Wait 5-10 minutes and retry
+  - Subscribe to status page for maintenance notifications
+  - Check Retry-After header for recommended wait time
+
+## Desktop Application Issues
+
+### Application Won't Start
+
+**Windows**:
+1. Check Task Manager for zombie CloudSync processes
+2. End any CloudSync processes
+3. Delete C:\Users\[YourName]\AppData\Local\CloudSync\temp
+4. Restart application
+5. If issue persists, reinstall application
+
+**macOS**:
+1. Open Activity Monitor
+2. Force quit any CloudSync processes
+3. Delete ~/Library/Application Support/CloudSync/cache
+4. Restart application
+5. If issue persists, reinstall application
+
+**Linux**:
+1. Kill CloudSync processes: `killall cloudsync`
+2. Clear cache: `rm -rf ~/.cloudsync/cache`
+3. Restart application
+4. Check logs: `tail -f ~/.cloudsync/logs/sync.log`
+
+### High CPU or Memory Usage
+
+**Causes and Solutions**:
+
+1. **Large sync queue**
+   - Pause sync temporarily
+   - Enable selective sync for fewer folders
+   - Increase sync batch size in settings
+
+2. **Corrupted local database**
+   - Quit CloudSync application
+   - Rename or delete database file (will be rebuilt)
+   - Windows: C:\Users\[YourName]\AppData\Local\CloudSync\db\
+   - macOS: ~/Library/Application Support/CloudSync/db/
+   - Linux: ~/.cloudsync/db/
+   - Restart application
+
+3. **Too many watched folders**
+   - Reduce number of folders being synced
+   - Use parent folder sync instead of multiple subfolders
+   - Consider increasing system file handle limits (Linux/macOS)
+
+## Mobile App Issues
+
+### Background Sync Not Working
+
+**iOS**:
+1. Check Settings > CloudSync > Background App Refresh is enabled
+2. Ensure Low Power Mode is disabled
+3. Go to Settings > Battery and check if CloudSync is being throttled
+4. Reinstall app if issue persists
+
+**Android**:
+1. Disable battery optimization for CloudSync
+   - Settings > Apps > CloudSync > Battery > Unrestricted
+2. Check Data Saver is not blocking background sync
+3. Ensure app has Storage and Network permissions
+4. Clear app cache if issue persists
+
+### Files Not Downloading on Mobile
+
+**Common causes**:
+1. **Insufficient storage** - Free up at least 1 GB
+2. **Download over WiFi only enabled** - Check app settings
+3. **Corrupted cache** - Clear app cache in device settings
+4. **File size exceeds mobile limit** - Mobile downloads limited to 500 MB per file
+
+## Browser Issues
+
+### Upload Failures in Web Interface
+
+**Solutions**:
+1. Try different browser (Chrome, Firefox, Safari)
+2. Disable browser extensions temporarily
+3. Clear browser cache and cookies
+4. Check file size doesn't exceed plan limits
+5. Try uploading smaller batches of files
+
+### Session Timeout Issues
+
+**Cause**: Default session timeout is 12 hours
+
+**Solutions**:
+- Enable "Remember me" on login
+- Configure longer session timeout (admin only)
+- Use desktop app for long work sessions
+- Check if firewall is blocking session cookies
+
+## Getting Additional Help
+
+If these troubleshooting steps don't resolve your issue:
+
+1. **Check Status Page**: https://status.cloudsync.com
+2. **Search Knowledge Base**: https://help.cloudsync.com
+3. **Contact Support**:
+   - Email: support@cloudsync.com (24-48 hour response)
+   - Chat: Available for Business and Enterprise plans
+   - Phone: Enterprise plans only
+4. **Include in support request**:
+   - CloudSync version number
+   - Operating system and version
+   - Error messages or screenshots
+   - Steps to reproduce the issue
+   - Request ID from error responses (if applicable)

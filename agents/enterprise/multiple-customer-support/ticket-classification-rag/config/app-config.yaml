@@ -1,0 +1,34 @@
+# Customer Support RAG - Application Configuration
+
+application:
+  name: customer-support-rag
+  version: 1.0.0
+  environment: dev  # dev, staging, prod
+
+logging:
+  level: INFO  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: json  # json or text
+  include_correlation_id: true
+
+bedrock:
+  # Claude Sonnet 4.5 (recommended for production)
+  model_id: anthropic.claude-sonnet-4-5-20250929-v1:0
+  max_tokens: 1000
+  temperature: 0.7  # 0.0 for classification, 0.7 for answer generation
+  timeout_seconds: 30
+  region: us-east-1
+
+rag:
+  chunk_size: 512  # tokens
+  chunk_overlap: 102  # 20% of chunk_size
+  top_k_results: 5  # number of chunks to retrieve
+  similarity_threshold: 0.75  # minimum similarity score (0.0-1.0)
+
+opensearch:
+  endpoint: your-opensearch-endpoint.us-east-1.aoss.amazonaws.com
+  index_name: customer-support-docs
+  vector_store_type: opensearch
+
+lambda_config:
+  memory_size: 512  # Higher memory for throughput (vs 256 default)
+  timeout: 30  # Higher timeout for hybrid search operations

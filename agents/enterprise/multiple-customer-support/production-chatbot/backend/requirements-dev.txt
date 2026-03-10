@@ -1,0 +1,14 @@
+# Testing
+pytest==8.3.4
+pytest-cov==6.0.0
+pytest-mock==3.14.0
+moto==5.0.24
+
+# Code quality
+black==24.10.0
+pylint==3.3.4
+mypy==1.13.0
+
+# Type stubs
+boto3-stubs==1.35.0
+types-PyYAML==6.0.12.20240917
